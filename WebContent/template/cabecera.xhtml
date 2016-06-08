@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: user1
+  Date: 5/10/13
+  Time: 17:40
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions" >
+
+	<p:panelGrid id="pnCabUsuario"  style="height: 100%;  width:100%;" styleClass="ui-border-panel">
+			<p:row>
+			
+				
+				<p:column style="text-align: center; width:100%;">
+					<h:graphicImage value="/util/images/icon/paxtravel.png" />
+				</p:column>
+			
+				<p:column style="vertical-align: bottom !important; text-align: right; width:50%;">
+			
+				</p:column>
+			
+			
+			
+			</p:row>		
+				
+	</p:panelGrid>
+	
+	
+	
+	
+	<p:confirmDialog  	id="DlgConfirm" 
+								header="Cerrar Sesion" 
+								widgetVar="WVconfirm" 
+								appendTo="@(body)"
+								modal="true"
+								width="350" 
+								showEffect="clip" 
+	     						hideEffect="clip"
+								security="alert"
+								message="Ud. esta eliminando su sesion, favor de confirmar."
+								style="position: absolute;"> 
+							<h:form>
+							<h:panelGrid columns="2" style="text-align: center; width: 100%;">
+							<p:column>
+								<p:commandButton value="Aceptar" 
+												 ajax="true" 
+												 action="#{cLogin.exitSession}" 
+												 icon="ui-icon-check"
+												 global="false">
+									<f:param name="id" value="0" />
+							    </p:commandButton>   
+							</p:column>				 
+							</h:panelGrid> 																 
+						</h:form>
+	</p:confirmDialog >
+	
+	
+	
+</f:view>

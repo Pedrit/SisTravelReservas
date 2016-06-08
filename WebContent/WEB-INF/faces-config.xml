@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+    version="2.1">
+    
+    <application>
+    	
+    	<!--   <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>  -->  
+          <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+    	<resource-bundle>
+			<base-name>pe.com.fincoop.resource.messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		
+	  	<message-bundle>
+	  		pe.com.fincoop.resource.messages
+	  	</message-bundle>
+     
+		<locale-config>
+			<default-locale>es</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+	</application>
+	
+	
+	<factory>
+       <exception-handler-factory>pe.com.fincoop.utilitario.ExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+	</factory>
+
+</faces-config>

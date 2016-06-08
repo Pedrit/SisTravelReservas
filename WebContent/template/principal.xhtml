@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by 
+  User: PROMERO
+  Date: 5/06/12 
+  Time: 17:40
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<link href="#{request.contextPath}/util/css/estilos.css"
+		rel="stylesheet" type="text/css" />
+	<script>
+
+    function resize(name, divKey, width, height) {
+		$('#' + name + '').innerWidth($(window).innerWidth() - width);
+		$('#' + name + '').innerHeight($(window).innerHeight() - height);
+		$('#' + name + '').find('div:contains(' + divKey + ')')
+						  .css({'height' : '' + $(window).innerHeight() - (height + 40) + '','width' : ($.browser.msie) ? '100%' : 'auto'});
+	}
+
+    PrimeFaces.locales["es"] = {
+    	    closeText: "Salir",
+    	    prevText: "Anterior",
+    	    nextText: "Siguiente",
+    	    monthNames: ["Enero","Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    	    monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+    	    dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    	    dayNamesShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+    	    dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+    	    weekHeader: "Semana",
+    	    firstDay: 0,
+    	    isRTL: false,
+    	    showMonthAfterYear: false,
+    	    yearSuffix: "",
+    	    timeOnlyTitle: "Solo hora",
+    	    timeText: "Tiempo",
+    	    hourText: "Hora",
+    	    minuteText: "Minuto",
+    	    secondText: "Segundo",
+    	    currentText: "Hoy",
+    	    ampm: false,
+    	    month: "Mes",
+    	    week: "Semana",
+    	    day: "Día",
+    	    allDayText : "Todo el día"
+    	};
+    
+    
+    var delay = (function(){
+   		var timer = 0;
+   	 	return function(callback, ms){
+   	    clearTimeout (timer);
+   	    timer = setTimeout(callback, ms);
+   	  };
+   	})();
+
+   	var Height = "666";
+   	var Width = "1359";
+
+   	
+   	$(window).resize(function() {
+   	    delay(function(){
+			
+   	    	if($(window).innerHeight() &lt;= Height){ 
+           		PF('WGNtResolutionScreen').show(); 
+       		}else if($(window).innerWidth() &lt;= Width){ 
+   				PF('WGNtResolutionScreen').show();
+			}else if($(window).innerHeight() &gt;= Height){ 
+           		PF('WGNtResolutionScreen').hide();
+       		}else if($(window).innerWidth() &gt;= Width){ 
+   				PF('WGNtResolutionScreen').hide();
+			}
+       	      
+   	    }, 100);
+
+   	});
+
+   	window.onload = function() {
+   		$('#cargando').hide();
+		if($(window).innerWidth() &lt;= Width || 
+			$(window).innerHeight()  &lt;= Height){
+			PF('WGNtResolutionScreen').show();
+		}
+		
+	}
+
+	</script>
+
+</h:head>
+	
+	
+	
+<h:body>
+	<link rel="stylesheet" type="text/stylesheet" href="util/css/progressBar2.css" />
+	<script type="text/javascript" src="util/js/progressBar.js"></script>
+	<div id="cargando" style="text-align:center; margin-top:300px; font-family: arial,sans-serif" >
+		<p:outputLabel value="Cargando ERP Fincoop..." style="color:blue; font-size:15px"  />
+	</div>
+	
+	<p:idleMonitor  id="idlMonitor"  timeout="500"  >  
+	<h:outputText id="lblEstado" value="#{cLogin.login.session.st_usuario}"  style="color: #2e6e9e; visibility:hidden;"  /> 
+	
+	    <p:ajax event="idle"  
+	    				listener="#{cLogin.validSession}"  
+	    				global="false"
+	    				update=":lblEstado"
+	    				oncomplete="if(document.getElementById('lblEstado').innerHTML == 0){ PF('WGUserDisabled').show(); }"
+	    				immediate="true"
+	    				ignoreAutoUpdate="true"/>  
+	</p:idleMonitor> 
+
+
+	<p:notificationBar id="ntUserDisabled" position="top" effectSpeed="fast" effect="slide" widgetVar="WGUserDisabled" style="height: 100%; background: #FFFFFF;">
+
+		
+			<p:outputLabel value="Alerta!!!" style="color:red; font-size:24px; " />
+			<br/>
+			
+			<p:outputLabel value="Su Usuario ha sido desactivado, y su sesion eliminada, favor de ponerse en contacto con el area correspondiente."  style="font-size:14px; color: red;" />
+			<p:outputLabel value="ir " style="font-size:14px;  color: red;" />
+			<p:commandLink value="Login" style="font-size:14px;  color: red; font-weight: bold" onclick="location.reload();" global="false"/>
+			<p:outputLabel value="." style="font-size:14px;  color: red;" />
+			
+			
+
+	</p:notificationBar>
+	
+
+	
+
+	<p:growl widgetVar="msg"  showDetail="true"  life="3000" autoUpdate="true"   showSummary="false"/> 
+	
+	<p:layout fullPage="true" style="background: url('http://www.start.com.cy/cyprus/images/bg.png') no-repeat top !important">
+		
+		<p:layoutUnit position="north" size="140" resizable="false" closable="false" collapsible="false"> 
+
+			<ui:insert name="header">
+				<ui:include src="cabecera.xhtml" />
+			</ui:insert>
+
+		</p:layoutUnit>
+
+		<p:layoutUnit position="west" size="220" header="Menu de Opciones"
+			
+			resizable="false" closable="false" collapsible="true" effect="drop">
+
+			<ui:insert name="menu">
+				<ui:include src="menu.xhtml" />
+			</ui:insert>
+
+		</p:layoutUnit>
+
+		<p:layoutUnit position="center">
+			
+			<ui:insert name="content" />
+			
+			
+			<p:tooltip for="stack" value="Miselania" />
+			<p:stack icon="/util/images/principal/stack.png" id="stack">
+				<p:menuitem value="Usuario"
+					icon="http://cdn1.iconfinder.com/data/icons/general13/png/72/administrator.png"
+					url="#" />
+				<p:menuitem value="Navegador"
+					icon="http://cdn1.iconfinder.com/data/icons/fs-icons-ubuntu-by-franksouza-/64/google-chrome.png"
+					url="#" />
+				<p:menuitem value="Gmail"
+					icon="http://cdn1.iconfinder.com/data/icons/Futurosoft%20Icons%200.5.2/64x64/apps/gmail_red.png"
+					url="#" />
+				<p:menuitem value="Calendario"
+					icon="http://cdn1.iconfinder.com/data/icons/musthave/48/Calendar.png"
+					url="#" />
+				<p:menuitem value="Nosotros"
+					icon="http://png.findicons.com/files/icons/730/soft/80/info.png"
+					url="#" />
+			</p:stack>
+			
+			<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();" />
+			<p:dialog modal="false" widgetVar="statusDialog"  visible="false" 
+				 draggable="false" closable="false" appendTo="@(body)" resizable="false" showHeader="false">
+				<p:graphicImage value="/util/images/principal/ajaxloadingbar.gif" />
+			</p:dialog>
+			
+			
+		</p:layoutUnit>
+
+
+		<!-- SEGURIDAD -->
+		<ui:include src="/page/modulo/seguridad/usuario.xhtml" />
+		<ui:include src="/page/modulo/seguridad/perfil.xhtml" />
+		<ui:include src="/page/modulo/seguridad/menu.xhtml" />
+		<ui:include src="/page/modulo/seguridad/registrarArea.xhtml" />
+
+		
+		<!-- MODULO DE RESERVAS -->
+		<ui:include src="/page/modulo/reservas/RegistroOrden.xhtml" />
+		
+		
+		
+		
+		
+		
+		<!-- VISUALIZADOR DE PDF -->
+		<p:dialog id="DlgDocument"  
+				  header="Visualizar Documento PDF"
+				  widgetVar="WGViwerPDF" 
+				  resizable="false" 
+				  showEffect="fade"
+				  hideEffect="clip" 
+				  modal="true" 
+				  appendTo="@(body)" 
+				  width="60%"
+				  height="90%">
+			<p:media value="/report.pdf" player="pdf" width="100%" height="90%" />
+	 		</p:dialog> 
+
+		<!-- VENTANA DE CONFIRMACION -->
+		<p:confirmDialog id="dlgConfirmation"
+						 widgetVar="WGConfirmation"
+						 global="true" 
+						 closeOnEscape="true" 
+						 closable="true" 
+						 appendTo="@(body)"
+				     	 width="30%"
+				     	 severity="true"
+				     	 position="center"
+				     	 showEffect="face">  
+		   	<p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+           	<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    	</p:confirmDialog> 
+    	
+    	<!-- VENTANA SESSION INVALIDA -->
+	<p:dialog id="dlgInvalidSession"
+						 widgetVar="WGInvalidSession"
+						 global="true" 
+						 closeOnEscape="false" 
+						 closable="false" 
+						 appendTo="@(body)"
+				     	 width="30%"
+				     	 severity="true"
+				     	 position="center"
+				     	 showEffect="face"
+				     	 modal="true">  
+		   	<p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+           	<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    	</p:dialog> 
+    	
+    	
+    	
+    	
+		
+    	</p:layout>
+
+
+
+    </h:body>
+    </html>

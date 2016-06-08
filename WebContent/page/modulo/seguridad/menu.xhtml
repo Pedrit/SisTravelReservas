@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Resumen. 
+ * Descripción :pagina de inicio de la aplicacion.
+ * Fecha de Creación : 15/01/2014 23:56:02
+ * Autor : PROMERO.
+ * =======================================================================
+ * Modificaciones
+ * Fecha            Nombre                     Descripción
+ * =======================================================================
+ * 
+ -->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:f="http://java.sun.com/jsf/core">
+
+
+<p:dialog 	id="dlgMenu" 
+		  	header=".:[Ventana - Menús] :." 
+		  	widgetVar="WGMenu"
+			modal="false" 
+			appendTo="@(body)"
+	     	width="80%"
+	     	height="600"
+	     	showEffect="face" 
+	     	hideEffect="clip"
+			resizable="false" 
+			maximizable="true"
+			minimizable="true"
+			draggable="true"
+			position="center"
+			closeOnEscape="true"
+			dynamic="true" >
+	
+	<h:form id="frmMantenimientoMenu">	
+		<p:toolbar id="tb">
+			<p:toolbarGroup align="left">
+				 
+				
+				<p:commandButton id="btnNuevo" 
+								 value="Nuevo"
+								 icon="ui-icon-document"
+								 update="#{cMenu.update}" 
+								 process="frmMantenimientoMenu"
+								 actionListener="#{cMenu.nuevo}"
+								 oncomplete="document.getElementById('#{cMenu.focus}').focus()"
+								 immediate="true"
+								 global="false">
+					<p:resetInput target="#{cMenu.resetInput}" />  
+			    </p:commandButton>
+				
+	
+				<p:commandButton id="btnGuardar" 
+								  value="Guardar"
+								  icon="ui-icon-disk" 
+								  global="false"
+								  update="#{cMenu.updateForm}"
+								  process="#{cMenu.process}"
+								  actionListener="#{cMenu.guardar}"
+								  partialSubmit="true">
+				<p:confirm header="Confirmación Guardar" 
+						   		 message="¿Estas Seguro de Grabar este REGISTRO?" 
+						          icon="ui-icon-alert" />
+				</p:commandButton>
+	
+				<p:separator />
+	
+				<p:commandButton title="Eliminar"
+								 icon="ui-icon-trash" >
+				<p:confirm header="Confirmación Eliminar" 
+						   message="¿Estas Seguro de ELIMINAR?" 
+						   icon="ui-icon-alert" />
+				</p:commandButton>
+	
+				<p:separator />
+	
+				<p:commandButton title="Actualizar"
+							 	 icon="ui-icon-refresh"
+							 	 update=":frmMantenimientoMenu" 
+								 process="frmMantenimientoMenu" 
+								 global="false"/>
+								 
+				<p:defaultCommand target="btnGuardar" /> 
+	
+			</p:toolbarGroup>
+	
+			<p:toolbarGroup align="right">
+				<p:menuButton value="Opciones">
+					<p:menuitem value="Reubicar Ventana" 
+								oncomplete="WGMenu.initPosition();"
+								icon="ui-icon-newwin"/>
+					<p:menuitem value="ShowCase"
+						url="http://www.primefaces.org/showcase" />
+					<p:menuitem value="TouchFaces"
+						url="http://www.primefaces.org/showcase/touch" />
+				</p:menuButton>
+			</p:toolbarGroup>
+	
+		</p:toolbar>
+		<p:spacer height="10"/>
+		<p:tabView id="tvMenus" >
+			<p:ajax event="tabChange" 
+						listener="#{cMenu.onChangeTabView}" 
+						immediate="true"
+						global="false"
+						update=":frmMantenimientoMenu:btnNuevo,
+									  :frmMantenimientoMenu:btnGuardar,
+									  :frmMantenimientoMenu:tvMenus:frmModulo:dtModulo"/> 
+			<p:tab id="tab1" title="Modulos" >
+			<h:form id="frmModulo">
+			<p:spacer height="10"/>
+			<p:outputLabel value="Creación de Módulos" styleClass="ui-label-title"/>
+			<p:separator/>
+			<p:panelGrid id="pgDatosModulo" styleClass="ui-border-panel">
+				
+				<p:row>
+				<p:column styleClass="alignRight">
+				<h:outputLabel value="Titulo Módulo:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtTituloModulo" 
+	    					 value="#{cMenu.bean.modulo.vTituloMenu}"
+	    					 style="font-size: 10px" size="40"  required="true" requiredMessage="Titulo del Modulo no Ingresado" />
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Descripción:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtDescripcionModulo" 
+		    				 value="#{cMenu.bean.modulo.vDescripcion}"
+		    				 style="font-size: 10px" size="120"  required="true" requiredMessage="Descripción del Modulo no Ingresado"/>
+		    	</p:column>
+			    </p:row>
+			
+			</p:panelGrid>
+
+			<p:separator/>
+			
+			<p:dataTable id="dtModulo"
+								 var="modulo" 
+								 value="#{cMenu.bean.lsModulos}"
+								 selection="#{cMenu.bean.moduloRowSelected}"
+								 selectionMode="single"
+								 rowKey="#{modulo.iCodMenu}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								 paginator="true" 
+								 rows="10"  
+								 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		               			 rowsPerPageTemplate="5,10" 
+		               			 emptyMessage="Ningún Registro Encontrado.">
+               	<p:ajax event="page" global="false"/>		 
+             	<p:ajax event="rowSelect" 
+             				listener="#{cMenu.moduloRowSelected}" 
+             				process=":frmMantenimientoMenu:tvMenus:frmModulo:dtModulo"
+             				global="false"
+             				update=":frmMantenimientoMenu:tvMenus:frmModulo:pgDatosModulo,
+             							 :frmMantenimientoMenu:tvMenus:frmMenu" />
+				 
+					<f:facet name="header" style="text-align: right;"> 
+			 		<h:outputText value="MODULOS DEL SISTEMA" style="font-size: 12px;"/>
+          			</f:facet>
+        		
+        		
+        		     <p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+					 <h:outputText value="#{rowIndex+1}" />
+				</p:column>
+        		
+				<p:column headerText="Nombre" style="width: 20%">
+	            	<h:outputText value="#{modulo.vTituloMenu}" />
+	            </p:column>
+	            <p:column headerText="Descripción" >
+	            	<h:outputText value="#{modulo.vDescripcion}" />
+	            </p:column>
+	            
+	            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+	            	<h:outputText value="#{modulo.fe_usua_crea}" >
+	            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+	            	</h:outputText>
+	            </p:column>
+	            
+	             <f:facet name="footer" >
+	            	<p:spacer/>
+	            </f:facet> 
+		    </p:dataTable>
+		    
+			</h:form>	
+			</p:tab>
+			
+			<p:tab id="tab2" title="Menus por Modulo" >
+			<h:form id="frmMenu">
+			
+			<p:outputLabel id="titleModulo"  value="#{cMenu.bean.moduloRowSelected.vTituloMenu}" styleClass="ui-label-title"/>
+			<p:separator/>
+			
+			<p:panelGrid id="pgDatosMenu" styleClass="ui-border-panel" >
+				<p:row>
+				<p:column styleClass="alignRight">
+				<h:outputLabel value="Titulo Menú:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtTituloMenu" 
+	    					 value="#{cMenu.bean.menu.vTituloMenu}"
+	    					 style="font-size: 10px" size="40" required="true"  requiredMessage="Titulo de Menú no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Descripción:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtDescripcionMenu" 
+		    				 value="#{cMenu.bean.menu.vDescripcion}"
+		    				 style="font-size: 10px" size="120" required="true" requiredMessage="Descripción de Menu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Ejecutable:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtCommandMenu" 
+		    				 value="#{cMenu.bean.menu.vCommand}"
+		    				 style="font-size: 10px" size="120" required="true" requiredMessage="Ejecutable de Menu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Contenedor:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtContenedor" 
+		    				 value="#{cMenu.bean.menu.vOnComplete}"
+		    				 style="font-size: 10px;" size="120" required="true" requiredMessage="Contenedor de Menu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			</p:panelGrid>
+			
+			<p:separator/>
+			
+			<p:dataTable id="dtMenu"
+						 var="menu" 
+						 value="#{cMenu.bean.lsMenus}"
+						 selection="#{cMenu.bean.menuRowSelected}"
+						 selectionMode="single"
+						 rowKey="#{menu.iCodMenu}" 
+						 rowIndexVar="rowIndex"
+						 style="font-size: 10px; width: 100%;"
+						 paginator="true" 
+						 rows="10"  
+						 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+						 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+               			 rowsPerPageTemplate="5,10" 
+               			 emptyMessage="Ningún Registro Encontrado.">
+				 
+			<f:facet name="header" style="text-align: right;"> 
+		 		<h:outputText value="MENUS PARA [#{cMenu.bean.moduloRowSelected.vTituloMenu}]" style="font-size: 12px; text-transform: uppercase;"/>
+         	</f:facet>
+         	<p:ajax event="page" global="false"/>
+         	<p:ajax event="rowSelect"  
+         				listener="#{cMenu.menuRowSelected}"
+         				global="false"
+         				update=":frmMantenimientoMenu:tvMenus:frmMenu:pgDatosMenu,
+         							  :frmMantenimientoMenu:tvMenus:frmSubMenu" />
+        		
+        		
+        		<p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+					 <h:outputText value="#{rowIndex+1}" />
+				</p:column>
+        		
+				<p:column headerText="Nombre" style="width: 25%">
+	            	<h:outputText value="#{menu.vTituloMenu}" />
+	            </p:column>
+	            <p:column headerText="Descripción">
+	            	<h:outputText value="#{menu.vDescripcion}" />
+	            </p:column>
+	            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+	            	<h:outputText value="#{menu.fe_usua_crea}" >
+	            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+	            	</h:outputText>
+	            </p:column>
+	            
+	             <f:facet name="footer" >
+	            	<p:spacer/>
+	            </f:facet> 
+		    </p:dataTable>
+			
+			</h:form>	
+			</p:tab>
+			
+			<p:tab id="tab3" title="SubMenus por Modulo" >
+			<h:form id="frmSubMenu">
+			
+			<p:spacer height="10"/>
+			<p:outputLabel id="titleSubMenu" value="#{cMenu.bean.menuRowSelected.vTituloMenu}" styleClass="ui-label-title"/>
+			<p:separator/>
+			
+			<p:panelGrid  id="pgDatosSubMenu" styleClass="ui-border-panel">
+				<p:row>
+				<p:column styleClass="alignRight">
+				<h:outputLabel value="Titulo Sub Menú:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtTituloSubMenu" 
+	    					 value="#{cMenu.bean.subMenu.vTituloMenu}"
+	    					 style="font-size: 10px" size="40" required="true" requiredMessage="Titulo de SubMenu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Descripción:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtDescripcionSubMenu" 
+		    				 value="#{cMenu.bean.subMenu.vDescripcion}"
+		    				 style="font-size: 10px" size="120" required="true" requiredMessage="Descripción de SubMenu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Ejecutable:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtCommandSubMenu" 
+		    				 value="#{cMenu.bean.subMenu.vCommand}"
+		    				 style="font-size: 10px" size="120" required="true" requiredMessage="Ejecutable de SubMenu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			    <p:row>
+		    	<p:column styleClass="alignRight">
+				<h:outputLabel value="Contenedor:" styleClass="ui-label-text" />
+		    	</p:column>
+		    	<p:column>
+		    	<p:inputText id="txtSubMenuContenedor" 
+		    				 value="#{cMenu.bean.subMenu.vOnComplete}"
+		    				 style="font-size: 10px" size="120"  required="true" requiredMessage="Contenedor de SubMenu no ingresado."/>
+		    	</p:column>
+			    </p:row>
+			</p:panelGrid>
+			
+			<p:separator/>
+			
+			<p:dataTable id="dtSubMenu"
+								 var="subMenu" 
+								 value="#{cMenu.bean.lsSubMenus}"
+								 selection="#{cMenu.bean.subMenuRowSelected}"
+								 selectionMode="single"
+								 rowKey="#{subMenu.iCodMenu}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								 paginator="true" 
+								 rows="10"  
+								 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		               			 rowsPerPageTemplate="5,10" 
+		               			 emptyMessage="Ningún Registro Encontrado.">
+               	<p:ajax event="page" global="false"/>		 
+             	<p:ajax event="rowSelect" 
+             				update=":frmMantenimientoMenu:tvMenus:frmSubMenu:pgDatosSubMenu" 
+             				listener="#{cMenu.subMenuRowSelected}"
+             				global="false"/>
+				 
+				<f:facet name="header" style="text-align: right;"> 
+			 		<h:outputText value="SUB MENUS PARA [#{cMenu.bean.moduloRowSelected.vTituloMenu} / #{cMenu.bean.menuRowSelected.vTituloMenu}]" style="font-size: 12px; text-transform: uppercase;"/>
+          		</f:facet>
+        		
+        		
+        		<p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+					 <h:outputText value="#{rowIndex+1}" />
+				</p:column>
+        		
+				<p:column headerText="Nombre" style="width: 20%">
+	            	<h:outputText value="#{subMenu.vTituloMenu}" />
+	            </p:column>
+	            <p:column headerText="Descripción" >
+	            	<h:outputText value="#{subMenu.vDescripcion}" />
+	            </p:column>
+	            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+	            	<h:outputText value="#{subMenu.fe_usua_crea}" >
+	            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+	            	</h:outputText>
+	            </p:column>
+	            
+	             <f:facet name="footer" >
+	            	<p:spacer/>
+	            </f:facet> 
+		    </p:dataTable>
+						
+			</h:form>
+			</p:tab>
+			
+		</p:tabView>
+	</h:form>
+</p:dialog>
+	
+</ui:composition>

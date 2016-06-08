@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+	
+	
+	<p:dialog 	id="dlgActProgam"
+ 	     		header="Ventana - Actualizar Programacion"
+ 	     		widgetVar="WGActProgram"
+ 	    		appendToBody="@(body)" 
+ 	    		modal="false"
+				width="80%" 
+				height="600" 
+				showEffect="face" 
+				hideEffect="clip"
+				resizable="false" 
+				maximizable="true" 
+				minimizable="true"
+				draggable="true" 
+				position="center" 
+				closeOnEscape="true" 
+				dynamic="true"> 
+				
+		<h:form id="frmActPromacion">
+		
+			<p:toolbar>
+			
+				<p:toolbarGroup align="left">
+				
+					<p:commandButton 	id="btnNuevo" 
+														value="Nuevo"
+														icon="ui-icon-document"														
+														update="frmActPromacion" 
+														process="frmActPromacion"/>
+
+					<p:commandButton 	id="btnGuardar" 
+														value="Guardar"
+														icon="ui-icon-disk" 														
+														update="frmActPromacion" 
+														process="frmActPromacion" />
+					
+
+					<p:separator />
+					<p:commandButton title="Actualizar"	value="Actualizar"
+													 	icon="ui-icon-refresh" />
+					
+				
+				
+				</p:toolbarGroup>
+			
+				<p:toolbarGroup align="right">
+				
+					<p:menuButton value="Opciones">
+						<p:menuitem value="Ver Guia Proceso"  
+						 oncomplete="msg.renderMessage({summary:'Ups!', detail: ':) Estamos Trabajando en esto...!', severity: 'warn'});" 						 
+						 icon="ui-icon-document" 
+						 immediate="true" 
+						 global="false"/>
+										
+					</p:menuButton>
+				
+				</p:toolbarGroup>
+			
+			</p:toolbar>
+		
+		    <p:spacer height="20" />
+		    
+		    <p:tabView id="tvActualizarProgramacion">
+		    
+		    	<p:tab id="tab0" title="Listado"> </p:tab>
+		    
+		    	<p:tab id="tab1" title="Principal">
+		    	
+		    		<p:panel header="Datos Principales" style="font-size: 10px">
+		    		
+		    			<h:panelGrid columns="2" columnClasses="alignRight,alignLeft">
+		    		
+		    				
+		    					<h:outputLabel value="Nro Solicitud" styleClass="ui-label-text" />
+								<h:panelGrid columns="3" >
+									<p:inputText 	id="txtNuSolicitud" style="font-size: 10px" size="10" />
+									<p:inputText 	id="txtDescSolicitud" style="font-size: 10px" size="50" />
+										
+									<p:commandButton 	id="btnBuscarSolicitudFiltro" 
+																			icon="ui-icon-search" />
+								</h:panelGrid>
+								
+								<h:outputLabel value="Cliente" styleClass="ui-label-text" />
+								<h:panelGrid columns="3" >
+									<p:inputText 	id="txtCodCliente" style="font-size: 10px" size="10" />
+									<p:inputText 	id="txtDescCliente" style="font-size: 10px" size="50" />
+										
+									<p:commandButton 	id="btnBuscarClienteFiltro" 
+																			icon="ui-icon-search" />
+								</h:panelGrid>
+								
+								
+		    					<h:panelGrid columns="2" >
+		    					<h:outputLabel value="Fecha Inicio Programacion:" styleClass="ui-label-text" />
+		    					<p:calendar 	id="txtFecIniProgram" 
+																	style="font-size: 10px" 
+																	size="10"
+																	pattern="dd/MM/yyyy" />
+		    					
+		    					</h:panelGrid>
+		    					
+		    					<h:panelGrid columns="2" >
+		    					<h:outputLabel value="Fecha Fin Programacion:" styleClass="ui-label-text" />
+		    					<p:calendar 	id="txtFecFinProgram" 
+																	style="font-size: 10px" 
+																	size="10"
+																	pattern="dd/MM/yyyy" />
+		    					
+		    					</h:panelGrid>
+		    		
+		    		
+		    			</h:panelGrid>
+		    		
+		    		
+		    		
+		    		</p:panel>
+		    
+		    	</p:tab>
+		    
+		    </p:tabView>
+		
+		
+		</h:form>		
+	
+	
+	
+	</p:dialog>
+
+</ui:composition>
+

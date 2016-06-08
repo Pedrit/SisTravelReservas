@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui">
+       
+       
+<h:head> </h:head> <h:body style="text-align:center">
+    <p:growl id="mensajes" showDetail="true" life="2000" />
+   <h:form>
+      <p:panel header="Login" style="width:400px">
+        <h:panelGrid columns="2" cellpadding="5" align="center">
+          <h:outputLabel for="username" value="Usuario:" styleClass="ui-label-text"  />
+          <p:inputText value="#{loginBean.nombre}" id="username"
+             required="true" label="username" />
+          <h:outputLabel for="password" value="Clave:" styleClass="ui-label-text" />
+        <p:password value="#{loginBean.clave}" id="password" required="true"
+           label="password" />
+        <f:facet name="footer">
+          <p:commandButton id="loginButton" value="Login"
+             actionListener="#{loginBean.login}" update=":mensajes"
+             oncomplete="manejarLogin(xhr, status, args)" />
+        </f:facet>
+      </h:panelGrid>
+    </p:panel>
+  </h:form>
+</h:body>
+<script type="text/javascript">
+  //<![CDATA[
+  function manejarLogin(xhr, status, args) {
+    if (!args.validationFailed && args.estaLogeado) {
+      setTimeout(function() {
+        window.location = args.view;
+      }, 500);
+    }
+  }
+//]]>
+</script>
+</ui:composition>

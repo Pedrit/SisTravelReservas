@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog 	id="dlgRegistroOrdenes" 
+		  	header=".:[Ventana - Registro de Orden de Planificacion] :." 
+		  	widgetVar="WGRegistroOrdenes"
+			modal="false" 
+			appendTo="@(body)"
+	     	width="80%"
+	     	height="550"
+	     	showEffect="face" 
+	     	hideEffect="clip"
+			resizable="false" 
+			maximizable="true"
+			minimizable="true"
+			draggable="true"
+			position="center"
+			dynamic="true" 
+			closeOnEscape="true">
+			
+		
+		<h:form id="frmRegistroOrdenes">
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton 	id="btnNuevo" 
+										value="Nuevo"
+										icon="ui-icon-document" 														
+										update=":frmRegistroOrdenes" 
+										process="frmRegistroOrdenes">
+					</p:commandButton>
+
+					<p:commandButton 	id="btnGuardar" 
+										value="Guardar"
+										icon="ui-icon-disk" 														
+										update=":frmRegistroOrdenes" 
+										process="frmRegistroOrdenes">
+										
+					<p:confirm 			header="Confirmación Guardar" 
+						   		 		message="¿Estas Seguro de Grabar este REGISTRO?" 
+						          		icon="ui-icon-alert" />
+					</p:commandButton>
+					
+
+					<p:commandButton 	title="Actualizar"
+										value="Actualizar"
+										icon="ui-icon-refresh" >
+					</p:commandButton>
+					
+
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="right">
+				
+					<p:menuButton value="Opciones">
+						<p:menuitem value="Reubicar Ventana" 
+									oncomplete="WGRegistroOrdenes.initPosition();"
+									icon="ui-icon-newwin"/>
+						<p:menuitem value="ShowCase"
+									url="http://www.primefaces.org/showcase" />
+						<p:menuitem 	value="TouchFaces"
+									url="http://www.primefaces.org/showcase/touch" />
+					</p:menuButton>
+				
+				</p:toolbarGroup>
+			
+			
+			</p:toolbar>
+			<p:spacer height="10"/>
+			
+			<p:tabView id="tvRegistroOrdenes">
+				<p:ajax event="tabChange" 
+						listener="#{cMenu.onChangeTabView}" 
+						immediate="true"
+						global="false"
+						update=":frmRegistroOrdenes:btnNuevo,
+								:frmRegistroOrdenes:btnGuardar,
+								:frmRegistroOrdenes:tvRegistroOrdenes"/> 
+				
+					
+				<p:tab  id="tab0" title="Datos Generales">
+				
+					<h:form  id="frmDatosGenerales">
+					
+						<p:panel style="font-size: 10px; text-transform:uppercase;">
+						
+							<p:panel header="Datos Registro de Orden Planificacion"	 style="font-size: 10px; text-transform:uppercase;">
+						
+								<h:panelGrid 	columns="4"
+												columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+												styleClass="ui-border-panel">
+												
+									<p:column>
+						    			<h:outputLabel value="Nro Orden :" styleClass="ui-label-text" />
+						    		</p:column>
+						    		<p:column>
+						    			<p:inputText   id="txtNroOrden"						    		               
+						    					   style="font-size: 10px; text-transform: uppercase;" 
+												   size="10" 
+												   required="true"
+											 	   requiredMessage="Ingrese Nro de Orden.">
+										<p:ajax  global="false" update="@this"  event="blur" />
+										</p:inputText>
+									</p:column>
+									
+									<p:column>
+						    			<h:outputLabel value="Descripcion :" styleClass="ui-label-text" />
+						    		</p:column>
+						    		<p:column>
+						    			<p:inputText   id="txtDescripcion"						    		               
+						    					   style="font-size: 10px; text-transform: uppercase;" 
+												   size="50" 
+												   required="true"
+											 	   requiredMessage="Ingrese Descripcion de Orden.">
+										<p:ajax  global="false" update="@this"  event="blur" />
+										</p:inputText>
+									</p:column>
+									
+									<p:column>
+										<div style="position: relative; display: inline-block;">
+								    		<h:selectBooleanCheckbox 
+													style="margin-left: 24px;
+													top: 5px;position: relative;"
+													onclick="return false;">
+											</h:selectBooleanCheckbox>
+										</div>
+										<h:outputLabel value="Programa Nacional" styleClass="ui-label-text" />
+									</p:column>
+									
+									<p:column>
+										<div style="position: relative; display: inline-block;">
+								    		<h:selectBooleanCheckbox 
+													style="margin-left: 24px;
+													top: 5px;position: relative;"
+													onclick="return false;">
+											</h:selectBooleanCheckbox>
+										</div>
+										<h:outputLabel value="Programa Internacional" styleClass="ui-label-text" />
+									</p:column>
+									
+								
+									<p:column>
+						    			<h:outputLabel  value="Tiempo Duracion :"
+						    							styleClass="ui-label-text" />
+						    		</p:column>
+						    	
+						        	<p:column>
+						 				<p:selectOneMenu required="true"  id="cboTiempoDurac"   style="font-size: 10px ; width:200px;">
+					  							<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
+					     						<f:selectItem     itemLabel="Corto" itemValue="Corto"></f:selectItem>
+					    						<f:selectItem     itemLabel="Mediano" itemValue="Mediano" ></f:selectItem>
+					    						<f:selectItem     itemLabel="Largo" itemValue="Largo" ></f:selectItem>
+					    					
+					    				</p:selectOneMenu>	
+						    		</p:column>
+								
+								
+								
+								</h:panelGrid>
+						
+						
+						
+						
+							</p:panel>						
+							
+							<p:panel header="Agregar Destinos">
+							
+							
+							
+							
+							</p:panel>
+						
+						
+						</p:panel>
+					
+					</h:form>
+				
+				</p:tab>
+			
+			</p:tabView>
+		
+		</h:form>		
+		
+	</p:dialog>
+	
+</ui:composition>

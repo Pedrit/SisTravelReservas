@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:pe="http://primefaces.org/ui/extensions" >
+
+
+
+<p:dialog 	id="dlgUsuario" 
+		  	header=".:[Ventana - Usuario] :." 
+		  	widgetVar="WGUsuario"
+			modal="false" 
+			appendTo="@(body)"
+	     	width="80%"
+	     	height="600"
+	     	showEffect="face" 
+	     	hideEffect="clip"
+			resizable="false" 
+			maximizable="true"
+			minimizable="true"
+			draggable="true"
+			position="center"
+			dynamic="true" 
+			closeOnEscape="true">
+			
+	<h:form id="frmMantenimientoUsuario">	
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+	
+				<p:commandButton id="btnNuevo" 
+								 process="frmMantenimientoUsuario"
+								 value="Nuevo"
+								 icon="ui-icon-document"
+								 update="#{cUsuario.update}" 
+								 actionListener="#{cUsuario.nuevo}"
+								 oncomplete="document.getElementById('#{cUsuario.focus}').focus()"
+								 immediate="true"
+								 global="false">
+				<p:resetInput target="#{cUsuario.resetInput}" /> 
+				</p:commandButton>
+	
+				<p:commandButton id="btnGuardar" 
+								 value="Guardar"
+								 icon="ui-icon-disk" 
+								 update="#{cUsuario.updateForm}"
+								  process="#{cUsuario.process}"
+								  actionListener="#{cUsuario.guardar}"
+								  partialSubmit="true"
+								  global="false">
+								 
+				<p:confirm header="Confirmación Guardar" 
+						   		 message="¿Estas Seguro de Grabar este REGISTRO?" 
+						          icon="ui-icon-alert" />
+				</p:commandButton>
+	
+				<p:separator />
+	
+				<p:commandButton title="Actualizar"
+							 	 icon="ui-icon-refresh"
+							 	 process="@this" 
+							 	 global="false"
+							 	 action="#{cUsuario.actualizar}"
+							 	 update=":frmMantenimientoUsuario:tvUsuarios:frmUsuario:dtUsuario,
+							 	 			  :frmMantenimientoUsuario:tvUsuarios:frmUsuario:cboPerfilUsuario, 
+							 	 			  :frmMantenimientoUsuario:tvUsuarios:frmLsPersonas:dtPersonas" />
+	
+			<p:defaultCommand target="btnGuardar" /> 
+			
+			</p:toolbarGroup>
+	
+			<p:toolbarGroup align="right">
+				<p:menuButton value="Opciones">
+					<p:menuitem value="Ver Guia Proceso"  oncomplete="msg.renderMessage({summary:'Ups!', detail: ':) Estamos Trabajando en esto...!', severity: 'warn'});" 
+										 icon="ui-icon-document" 
+										 immediate="true" 
+										 global="false"/>
+					<p:menuitem value="Reubicar Ventana"  oncomplete="WGUsuario.initPosition();" icon="ui-icon-transfer-e-w" immediate="true" global="false"/>
+					<p:menuitem value="Cerrar " oncomplete="WGUsuario.hide();" icon="ui-icon-closethick" immediate="true" global="false"/>
+					
+				</p:menuButton>
+			</p:toolbarGroup>
+	
+		</p:toolbar>
+		<p:spacer height="10"/>
+		<p:tabView id="tvUsuarios">
+			<p:ajax event="tabChange" 
+						listener="#{cUsuario.onChangeTabView}" 
+						immediate="true"
+						global="false"
+						ignoreAutoUpdate="true"
+						update=":frmMantenimientoUsuario:btnNuevo,
+									  :frmMantenimientoUsuario:btnGuardar"  />
+			<p:tab id="tab1" title="Listado">
+				<h:form id="frmUsuario"> 
+				<p:panel id="pnDatosUsuario" header="Datos del Usuario del Sistema"  style="font-size: 10px; ">
+				
+				<p:panelGrid styleClass="ui-border-panel">
+					<p:row>  
+			            <p:column styleClass="alignRight">
+		            		<h:outputLabel value="Nro Documento:" styleClass="ui-label-text" />
+			            </p:column>
+			            <p:column>
+	            							 
+						
+						<p:panelGrid style="width: 400px;" styleClass="ui-border-panel" >
+							<p:row>
+							<p:column style="width: 40%">
+							<p:inputMask id="txtNroDocumento"
+											 value="#{cUsuario.bean.persona.nro_documento}"
+											 style="font-size: 10px; 
+											 background-color: #EFF8FB;"
+											 size="20" 
+											 required="true"
+											 requiredMessage="Nro Documento Incorrecto."
+											 mask="99999999"
+											 placeHolder="">
+							</p:inputMask>
+							<p:spacer width="5"/>	
+							<p:commandButton title="btnBuscar"  
+													  icon="ui-icon-search"  
+													  process="@this,txtNroDocumento" 
+													  actionListener="#{cUsuario.buscarPersona}" 
+													  update=":frmMantenimientoUsuario:tvUsuarios:frmUsuario:pnDatosUsuario"
+													  global="false"/>
+							</p:column>
+							<p:column style="text-align: left;">
+							<h:outputText  styleClass="ui-label-required"   value="#{cUsuario.lblInformation}"  />
+							</p:column>
+						</p:row>
+						</p:panelGrid>
+						
+						</p:column>
+						
+						<p:column styleClass="alignRight">
+					     <h:outputLabel value="Email: " />  
+					     </p:column>
+					     <p:column>
+					         <p:inputText id="txtEmailUsuario" 
+												 value="#{cUsuario.bean.usuario.email_corporativo}"
+												 style="font-size: 10px;  text-align: right;" 
+												 size="30"
+												 required="true"
+												 requiredMessage="Email de Usuario NO Ingresado.">
+								<pe:keyFilter for="txtEmailUsuario" regEx="/[a-z_\.]/i"/>
+							</p:inputText>	
+							<h:outputText  styleClass="ui-label-required"   value=" @DEMO-CORP.COM.PE"  />
+					     </p:column>
+						 
+			        </p:row> 
+					<p:row>  
+						<p:column styleClass="alignRight">
+							<h:outputLabel value="Usuario:" styleClass="ui-label-text" />
+				        </p:column>
+				        <p:column>
+				    		<p:inputText id="txtUsuario" 
+										 value="#{cUsuario.bean.usuario.vUsuario}"
+										 style="font-size: 10px; " 
+										 size="30"
+										 required="true"
+										 requiredMessage="Usuario de Sistema NO Ingresado."
+										 styleClass="mask-num"
+										 maxlength="15"
+										 validatorMessage="jojolete!">
+<!-- 									<pe:keyFilter for="txtUsuario" regEx="/[a-z_\ñ\Ñ]/i" preventPaste="false"  />  -->
+									<f:validateRegex pattern="^[a-zA-Z]+$" />
+						</p:inputText>
+				        </p:column>
+				        <p:column styleClass="alignRight">
+				     <h:outputLabel value=" Seleccione Perfil:" />  
+				     </p:column>
+				     <p:column>
+				     <p:selectCheckboxMenu id="cboPerfilUsuario" 
+														  value="#{cUsuario.bean.selectedPerfiles}"
+													 	  style="width: 300px;" 
+													 	  panelStyle="width: 300px;"
+													 	  label="Listado de Perfiles"
+													 	  filter="true"
+													 	  filterText="Filter" 
+													 	  filterMatchMode="startsWith">
+								<f:selectItems value="#{cUsuario.generico.lsPerfil}" 
+													  var="perfil" 
+													  itemValue="#{perfil.co_perfil}"  
+													  itemLabel="#{perfil.nom_perfil}"/> 
+							</p:selectCheckboxMenu>
+				     </p:column>
+				        
+				         
+				      </p:row>
+				     <p:row>
+				     <p:column styleClass="alignRight">
+							<h:outputLabel value="Contraseña Usuario:" styleClass="ui-label-text" />
+				        </p:column>
+				        <p:column>
+				    		<p:password id="txtPassword1" 
+										 	value="#{cUsuario.bean.usuario.vPassword}"
+										 	style="font-size: 10px; " 
+										 	size="50"
+										 	required="true"
+										 	requiredMessage="Password NO Ingresado." 
+										 	redisplay="true"/>
+				        </p:column>
+				     
+				    
+				     </p:row>
+				     <p:row>
+				     
+				      <p:column styleClass="alignRight">
+				     <h:outputLabel value="Activo: " />  
+				      </p:column>
+				       <p:column>
+						<p:selectBooleanCheckbox id="chkUsuarioActivo" value="#{cUsuario.activo}">  
+			            	<p:ajax listener="#{cUsuario.cambiarEstado}" 
+			            			update=":frmMantenimientoUsuario:tvUsuarios:frmUsuario:dtUsuario" 
+			            			global="false"/>   
+			         	</p:selectBooleanCheckbox> 
+				     </p:column>
+				     </p:row>
+				     
+				</p:panelGrid>
+				
+				</p:panel>
+				
+				<p:spacer height="10"/>
+				<p:dataTable id="dtUsuario"
+							 var="usuario" 
+							 value="#{cUsuario.bean.lsUsuarios}" 
+							 style="font-size: 10px; text-transform: uppercase;" 
+							 selectionMode="single"
+							 selection="#{cUsuario.bean.usuarioRowSelected}"
+							 rowKey="#{usuario.iCodUsu}"
+							 rowIndexVar="rowIndex"
+							 paginator="true" 
+							 rows="15"  
+							 rowStyleClass="#{usuario.st_usuario eq 0 ? 'ui-row-condicional' : null}"
+	               			 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+							 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	               			 rowsPerPageTemplate="5,10,15" 
+	               			 emptyMessage="Ningún Registro Encontrado.">
+		        <p:ajax event="page" global="false"/>
+		        <p:ajax event="rowSelect" 
+							listener="#{cUsuario.usuarioRowSelected}" 
+							global="false"
+							process="@this"
+							update=":frmMantenimientoUsuario:tvUsuarios:frmUsuario:pnDatosUsuario,
+										 :frmMantenimientoUsuario:tvUsuarios:frmPersona:pnDatosPersona"/> 
+							      			 
+		        <p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+					 <h:outputText value="#{rowIndex+1}" />
+				</p:column>
+	            <p:column headerText="Nombre de Usuario">
+	            	<h:outputText value="#{usuario.vUsuario}" />
+	            </p:column>
+	             <p:column headerText="Fecha Registro" style="text-align: center;">
+	            	<h:outputText value="#{usuario.fe_usua_crea}" >
+	            	 <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+	            	</h:outputText>
+	            </p:column>
+	             <p:column headerText="Email">
+	            	<h:outputText value="#{usuario.email_corporativo}" />
+	            </p:column>
+	             <p:column headerText="Estado">
+	            	<h:outputText value="#{usuario.st_usuario eq 0 ? 'DESHABILITADO' : 'HABILITADO'}" />
+	            </p:column>
+		        
+		    	</p:dataTable>
+				</h:form>
+			</p:tab>
+			<p:tab id="tab2" title="Datos Personales" >
+			<h:form id="frmPersona">
+				<p:panel id="pnDatosPersona" header="Datos Personales"
+						 footer="Datos Personales Inscritos Bajo Declaración Juarada de la Persona."
+						 style="font-size: 10px; text-transform: uppercase;">
+						 
+					<p:panelGrid styleClass="ui-border-panel" columns="2" style="width: 100%">
+					
+					<p:panelGrid styleClass="ui-border-panel">
+							<p:row>
+							<p:column styleClass="alignRight">
+									<h:outputLabel value="Doc. Identidad:" styleClass="ui-label-text" />
+									
+							</p:column>
+						    	<p:column >
+							<p:selectOneMenu id="cboTpDocIdentidad" 
+											 value="#{cUsuario.bean.persona.tip_documento}"
+										 	 style="width: 200px; heigth:100px;" 
+										 	 panelStyle="width: 200px;"
+										 	 required="true"
+										 	 requiredMessage="No se Ha Especificado Tipo de Documento.">
+								<f:selectItem itemLabel="Selecciona Doc. Identidad" itemValue="" />
+								<f:selectItems value="#{cGenerico.generico.lsTipoDocumento}"
+											   var="tipoDocumento"
+											   itemValue="#{tipoDocumento.codigo}"
+											   itemLabel="#{tipoDocumento.descripcion}" /> 
+								<p:ajax  global="false" update="@this"  event="change" />			   
+							</p:selectOneMenu>
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+									<h:outputLabel value="Nro Doc." styleClass="ui-label-text" />
+									
+								</p:column>
+						    	<p:column>
+						    		<p:inputText id="txtDocIdentidad" 
+						    					 value="#{cUsuario.bean.persona.nro_documento}" 
+						    					 style="font-size: 10px; text-transform: uppercase;" size="25" 
+						    					 required="true"
+											 requiredMessage="Ingrese Numero de Documento.">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						    	</p:column>
+						    	
+							</p:row>
+							<p:row>
+								<p:column styleClass="alignRight">
+						    		<h:outputLabel value="F. Nacimiento:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+									<p:calendar 	id="popupCal" 
+													style="font-size: 10px; text-transform: uppercase;;" 
+													size="15"
+													navigator="true"
+													pattern="dd/MM/yyyy"
+													value="#{cUsuario.bean.persona.fec_nacimiento}" 
+													required="true"
+											 		requiredMessage="Ingrese Fecha de Nacimiento.">
+									<p:ajax  global="false" update="@this"  event="dateSelect"  immediate="false" />
+									</p:calendar>
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+									<h:outputLabel value="Primer Nombre:" styleClass="ui-label-text"  />
+						        </p:column>
+						        <p:column>
+						    		<p:inputText id="txtNombre1" 
+													value="#{cUsuario.bean.persona.pri_nombre}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="true"
+											 		requiredMessage="Ingrese Primer Nombre.">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						        </p:column>
+							</p:row>
+							<p:row>  
+								<p:column styleClass="alignRight">
+									<h:outputLabel value="Segundo Nombre:" styleClass="ui-label-text"   />
+						        </p:column>
+						        <p:column>
+						    		<p:inputText id="txtNombre2" 
+													value="#{cUsuario.bean.persona.seg_nombre}"
+													style="font-size: 10px; text-transform: uppercase;;  text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 		requiredMessage="Ingrese Segundo Nombre.">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						        </p:column>
+						        <p:column styleClass="alignRight">
+									<h:outputLabel value="Tercer Nombre:" styleClass="ui-label-text" />
+						        </p:column>
+						        <p:column>
+						    		<p:inputText 	id="txtNombre3" 
+													value="#{cUsuario.bean.persona.ter_nombre}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 		requiredMessage="Ingrese Tercer Nombre."/>
+						        </p:column>
+						    </p:row>
+						    <p:row>
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Ap. Paterno:" styleClass="ui-label-text" />
+						        </p:column>
+						        <p:column>
+						    		<p:inputText id="txtApPaterno" 
+												 value="#{cUsuario.bean.persona.ape_paterno}"
+												 style="font-size: 10px; text-transform: uppercase;" 
+												 size="45"
+												 required="true"
+											 	 requiredMessage="Ingrese Apellido Paterno">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						        </p:column>
+						        <p:column styleClass="alignRight">
+									<h:outputLabel value="Ap. Materno:" styleClass="ui-label-text" />
+						        </p:column>
+						        <p:column>
+						    		<p:inputText id="txtApMaterno" 
+												 value="#{cUsuario.bean.persona.ape_materno}"
+												 style="font-size: 10px; text-transform: uppercase;" 
+												 size="45" 
+												 required="true"
+											 	 requiredMessage="Ingrese Apellido Materno">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						        </p:column>					    	
+						    </p:row>
+						    
+						    <p:row>
+						    	
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Edad:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+									<p:inputText id="txtEdad" 
+												 value="#{cUsuario.bean.persona.edad}"
+												 style="font-size: 10px; text-transform: uppercase;" 
+												 size="10" 
+												 required="true"
+											 	 requiredMessage="Ingrese Edad.">
+									<p:ajax  global="false" update="@this"  event="blur" />
+									</p:inputText>
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Estado Civil:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:selectOneMenu id="cboEstadoCivil" 
+												 value="#{cUsuario.bean.persona.estado_civil}" 
+												 style="width: 200px;" 
+												 panelStyle="width: 200px;" 
+												 required="true"
+											 	 requiredMessage="No se ha Especificado Estado Civil.">
+										<f:selectItem itemLabel="Selecciona Estado Civil" itemValue="" />
+										<f:selectItems value="#{cGenerico.generico.lsEstadoCivil}"
+													   var="estCivil"
+													   itemValue="#{estCivil.codigo}"
+													   itemLabel="#{estCivil.descripcion}" /> 
+									<p:ajax  global="false" update="@this"  event="change" />
+									</p:selectOneMenu>
+						    	</p:column>
+						    	
+						    	
+						    </p:row>
+						    <p:row>
+						    	<p:column styleClass="alignRight" >
+						    		<h:outputLabel value="Genero Sexual:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column styleClass="alignLeft" colspan="3">
+						    		<p:selectOneMenu id="cboGenSexual" 
+						    						 value="#{cUsuario.bean.persona.sexo}" 
+												     style="width: 200px;" 
+												     panelStyle="width: 200px;" 
+												     required="true"
+											 	 	 requiredMessage="Ingrese Genero Sexual.">
+										<f:selectItem itemLabel="Selecciona Genero" itemValue="" />
+										<f:selectItem itemLabel="Masculino (M) " itemValue="M" />
+										<f:selectItem itemLabel="Femenino (F) " itemValue="F" />
+										<p:ajax  global="false" update="@this"  event="change" />
+									</p:selectOneMenu>
+									
+						    	</p:column>
+						    </p:row>
+						    
+						    <p:row>
+						    	<p:column styleClass="alignRight" >
+						    		<h:outputLabel value="Telefono 1:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText 	id="txtTelefono1" 
+													value="#{cUsuario.bean.persona.nro_telefono1}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="true"
+											 	 	requiredMessage="Ingrese Numero de Telefono.">
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Telefono 2:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText id="txtTelefono2" 
+													value="#{cUsuario.bean.persona.nro_telefono2}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 	 	requiredMessage="Ingrese Numero de Telefono."/>
+						    	</p:column>
+						    </p:row>
+						    <p:row>
+						    	<p:column styleClass="alignRight" >
+						    		<h:outputLabel value="Email 1:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText 	id="txtEmail1" 
+													value="#{cUsuario.bean.persona.dir_email1}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45"
+													required="true"
+											 	 	requiredMessage="Ingrese Numero de Email." >
+								<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Email 2:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText 	id="txtEmail2" 
+													value="#{cUsuario.bean.persona.dir_email2}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 	 	requiredMessage="Ingrese Numero de Email." />
+						    	</p:column>
+						    </p:row>
+						    <p:row>
+						    	<p:column styleClass="alignRight" >
+						    		<h:outputLabel value="Nacionalidad:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText id="txtNacionalidad" 
+													value="#{cUsuario.bean.persona.nacionalidad}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 	 	requiredMessage="Ingrese Nacionalidad." />
+						    	</p:column>
+						    	<p:column styleClass="alignRight">
+						    		<h:outputLabel value="Sitio Web:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column>
+						    		<p:inputText 	id="txtSitioWeb" 
+													value="#{cUsuario.bean.persona.sitio_web}"
+													style="font-size: 10px; text-transform: uppercase;" 
+													size="45" 
+													required="false"
+											 	 	requiredMessage="Ingrese Sitio Web." />
+						    	</p:column>
+						    	
+						    </p:row>
+						    <p:row>
+						    	
+						    	<p:column styleClass="alignRight" >
+						    		<h:outputLabel value="Ocupación:" styleClass="ui-label-text" />
+						    	</p:column>
+						    	<p:column colspan="5">
+						    		<p:selectOneMenu id="cboOcupacion"  
+													 value="#{cUsuario.bean.persona.profesion}" 
+													 style="width: 410px;" 
+													 panelStyle="width: 410px;"
+													 required="true"
+											 	 	requiredMessage="No se ha Especificado Ocupación." >
+										<f:selectItem itemLabel="Seleccione Ocupación" itemValue="" />
+										<f:selectItems value="#{cGenerico.generico.lsOcupacion}"
+													   var="ocupacion"
+													   itemValue="#{ocupacion.codigo}"
+													   itemLabel="#{ocupacion.descripcion}" />
+										<p:ajax  global="false" update="@this"  event="change" />
+									</p:selectOneMenu>
+							    </p:column>
+						    </p:row>			    
+						    
+					</p:panelGrid>
+					
+					<p:panel id="pnFotografia"  header="Fotografia" style="width: 300px;">
+						<p:panelGrid styleClass="ui-border-panel" >
+							<p:row>
+							<p:column style="text-align: center;">
+									<h:graphicImage  width="275"  height="275" value="#{cUsuario.fotografiaEncoder}"   />
+									
+							</p:column>
+							</p:row>
+							<p:row>
+							<p:column style="text-align: center;">
+									<p:commandLink value="Editar Fotografia" 
+														       oncomplete="if('#{cUsuario.bean.persona.icodpersona}' != 0) {PF('WGCargarFotografia').show();}" 
+														       actionListener="#{cUsuario.validarCargaFotografia}"
+														       process="@this"
+														       update=":dlgCargarFotografia"
+														       global="false"/>
+							</p:column>
+							</p:row>
+							
+						</p:panelGrid>
+						
+					</p:panel>
+					
+					</p:panelGrid>	 
+				</p:panel>
+			 </h:form>
+			</p:tab>
+			<p:tab id="tab3"  title="Listado de Personas" >
+			<h:form id="frmLsPersonas">
+			<p:spacer height="10"/>
+			<p:outputLabel value="Personas" styleClass="ui-label-title"/>
+			<p:separator/>
+				<p:dataTable id="dtPersonas"
+								 var="persona" 
+								 value="#{cUsuario.bean.lsPersonas}"  
+								 selection="#{cUsuario.bean.personaRowSelected}" 
+								 selectionMode="single"
+								 rowKey="#{persona.icodpersona}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								 paginator="true" 
+								 rows="20"  
+								 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		               			 rowsPerPageTemplate="15,20,25" 
+		               			 emptyMessage="Ningún Registro Encontrado.">
+               	<p:ajax event="page" global="false"/>		 
+             	<p:ajax event="rowSelect" 
+             				listener="#{cUsuario.personaRowSelected}" 
+             				process=":frmMantenimientoUsuario:tvUsuarios:frmLsPersonas:dtPersonas"
+             				update=":frmMantenimientoUsuario:tvUsuarios:frmPersona:pnDatosPersona" 
+             				global="false"/>
+				 
+					<f:facet name="header" style="text-align: right;"> 
+			 		<h:outputText value="PERSONAS REGISTRADAS EN EL SISTEMA" style="font-size: 12px;"/>
+          			</f:facet>
+        		
+        		
+        		     <p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+					 <h:outputText value="#{rowIndex+1}" />
+				</p:column>
+        		
+				<p:column headerText="Nro Documento" >
+	            		<h:outputText value="#{persona.nro_documento}" />
+	            </p:column>
+	            <p:column headerText="Nombres" >
+	            		<h:outputText value="#{persona.ape_paterno} #{persona.ape_materno}, #{persona.pri_nombre} #{persona.seg_nombre} #{persona.ter_nombre}" />
+	            </p:column>
+	            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+	            	<h:outputText value="#{persona.fe_usua_crea}" >
+	            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+	            	</h:outputText>
+	            </p:column>
+	            
+	             <f:facet name="footer" >
+	            	<p:spacer/>
+	            </f:facet> 
+		    </p:dataTable>
+			</h:form>
+			</p:tab>
+		</p:tabView>	
+	</h:form>
+</p:dialog>
+
+<!-- VENTANA PARA SUBIR FOTOGRAFIA -->
+
+<p:dialog id="dlgCargarFotografia" 
+				  header="Cargar Fotografia de Usuario"
+				  widgetVar="WGCargarFotografia" 
+				  resizable="false" 
+				  showEffect="fade"
+				  hideEffect="clip" 
+				  modal="true" 
+				  appendTo="@(body)" 
+				  width="50%"
+				  closeOnEscape="true"
+				  dynamic="true">
+				  <h:form id="frmCargarFotografia">
+				  <p:fileUpload id="fuCargarFotografia"
+				  					   process="@this"
+				  					   update=":frmCargarFotografia,:frmMantenimientoUsuario:tvUsuarios:frmPersona:pnDatosPersona"
+								       fileUploadListener="#{cUsuario.cargarFotografia}" 
+									   mode="advanced" 
+									   dragDropSupport="false"  
+		                  			   multiple="false" 
+		                  			   sizeLimit="10000000"
+		                  			   fileLimit="1" 
+		                  			   allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+		                  			   style="width: 100%; font-size: 10px;"
+		                  			   invalidFileMessage="Documento no Permitido."
+									   invalidSizeMessage="Tamaño de Archivo Invalido."
+									   label="Seleccionar Archivo"  
+									   cancelLabel="Cancelar"
+									   uploadLabel="Enviar Archivo"
+									   fileLimitMessage="Cantidad de Archivos Permitos ha Sido Superada." 
+									   oncomplete="WGCargarFotografia.hide();"/>
+				</h:form>
+</p:dialog>
+	
+</ui:composition>

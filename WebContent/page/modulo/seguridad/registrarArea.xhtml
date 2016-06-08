@@ -1,0 +1,206 @@
+<!-- <?xml version="1.0" encoding="UTF-8" ?> -->
+
+  <!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        
+ <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	> 
+    
+ 	   <p:dialog id="dlgRegArea"
+ 	     header="Ventana - Registrar Area"
+ 	     widgetVar="WGRegArea"
+ 	    appendToBody="@(body)" modal="false"
+		width="80%" height="600" showEffect="face" hideEffect="clip"
+		resizable="false" maximizable="true" minimizable="true"
+		draggable="true" position="center" closeOnEscape="true" dynamic="true">  
+		
+		
+		<h:form id="frmRegArea">
+		<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton 	id="btnNuevo" value="Nuevo" icon="ui-icon-document"
+						update=":frmRegArea:tvLisArea,
+								:frmRegArea:btnGuardar,
+								:frmRegArea:btnEliminar,
+								:frmRegArea:btnActualizar"
+						actionListener="#{cRegArea.nuevo}"
+						immediate="true" 
+						global="false" 
+						process="frmRegArea"
+										disabled="false"
+										 oncomplete="document.getElementById('#{cRegArea.focus}').focus()"
+										 resetInput="#{cRegArea.resetInput}"
+						 >
+						
+						
+					 </p:commandButton>
+					 <p:commandButton 	
+					 id="btnGuardar" 
+					 value="Guardar" 
+					 icon="ui-icon-disk"
+						process="#{cRegArea.process}"
+						actionListener="#{cRegArea.guardar}"
+						update="#{cRegArea.update}"
+						partialSubmit="true" 
+						global="false"
+						 disabled="#{cRegArea.disabled}"
+						 oncomplete="document.getElementById('#{cRegArea.focus}').focus()"
+						
+					>
+					<p:confirm header="Confirmación Guardar"
+							message="¿Estas Seguro de Grabar este REGISTRO?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					
+					
+					<p:commandButton 	id="btnEliminar" 
+					value="Eliminar" 
+					icon="ui-icon-trash"
+										
+										actionListener="#{cRegArea.eliminarArea}"
+										update=":frmRegArea:tvLisArea:frmDatos:tblArea"
+										 process="@this"
+										  partialSubmit="true"
+										   global="false"
+			     				 disabled="#{cRegArea.disableEliminarActua}"
+										>
+										
+					  <p:confirm header="desea eliminar?" message="Usted esta seguro que desea Eliminar?" ></p:confirm>
+					  </p:commandButton>	
+					  
+					  <p:commandButton 	id="btnActualizar" 
+					  title="Actualizar"
+					   icon="ui-icon-refresh"
+										actionListener="#{cRegArea.actualizar}"
+										update=":frmRegArea:tvLisArea:frmDatos:tblArea"
+										process="@this" global="false"
+										 disabled="#{cRegArea.disableEliminarActua}"
+					
+					/>			 								 
+				</p:toolbarGroup>
+		 </p:toolbar>
+		 
+			 
+    <p:separator />
+    
+    		<p:tabView id="tvLisArea"    dynamic="true"  oncomplete="document.getElementById('#{cRegArea.focus}').focus()" cache="false">
+				<p:ajax event="tabChange"
+					listener="#{cRegArea.onChangeTabView}" immediate="false"
+					global="false" ignoreAutoUpdate="false"
+					process="#{cRegArea.process}"
+					update=":frmRegArea:btnNuevo,
+						    :frmRegArea:btnGuardar,
+						    :frmRegArea:btnEliminar
+						    :frmRegArea:btnActualizar"
+					 />
+				<p:tab id="tab1" title="Listado" >
+					<h:form id="frmDatos">
+						<p:focus context="pnDatosBusqueda" for="txtDescripcionBusqueda" />
+						
+							<h:panelGrid id="pnDatosBusqueda" columns="4">
+							<h:outputLabel value="Ingresar Busqueda: "
+								styleClass="ui-label-text" />
+
+
+							<p:inputText id="txtDescripcionBusqueda"
+								value="#{cRegArea.criterioBusqueda}"
+								style="font-size: 10px;" size="100">
+								
+								<p:ajax event="keyup"
+									listener="#{cRegArea.buscarArea}"
+									process="@this,txtDescripcionBusqueda" global="false"
+									update=":frmRegArea:tvLisArea:frmDatos:tblArea" />
+							</p:inputText>
+							<p:watermark for="txtDescripcionBusqueda"
+								value="Busqueda por Codigo, Descripcion" />
+							<p:commandButton id="btnBuscarCuentaFiltro" icon="ui-icon-search"
+								action="#{cRegArea.buscarArea}"
+								process="@this,txtDescripcionBusqueda" global="false"
+								
+								update=":frmRegArea:tvLisArea:frmDatos:tblArea" />
+						</h:panelGrid>
+						
+						
+						
+			 				<p:dataTable id="tblArea" var="area"
+   	  								value="#{cRegArea.bean.lstalarea}"
+   	  								style="font-size: 10px;" 
+   	  								selectionMode="single"
+									selection="#{cRegArea.bean.selectItems}"
+									rowKey="#{area.co_area}"
+									rowIndexVar="rowIndex"
+										 paginator="true" 
+										 rows="15"  
+										 currentPageReportTemplate="Página {currentPage} de {totalPages}"
+			                 			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+			                 			 rowsPerPageTemplate="5,10,15"  >
+	                 		<p:ajax event="page" global="false" />
+							<p:ajax event="rowSelect" global="false"
+								listener="#{cRegArea.AreaRowSelected}"
+								update=":frmRegArea:tvLisArea:frmDatos,
+										:frmRegArea:tvLisArea:frmListado	
+										:frmRegArea:tvLisArea" />
+										 			  
+	                 		<p:column headerText="Nro" styleClass="ui-state-default"
+								style="width: 10px;">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>	 						
+   							<p:column headerText="Codigo" >
+   							<h:outputText value="#{area.co_area}" />
+   							</p:column>
+   							<p:column headerText="Descripcion">
+   							<h:outputText value="#{area.de_area}" />
+   							</p:column>
+   							<p:column headerText="Estado">
+   							<h:outputText value="#{area.st_area eq 'A' ? 'Activo' : 'Inactivo'}" />
+   							</p:column>
+   							</p:dataTable>
+
+       					
+    				
+						
+						
+					</h:form>
+				</p:tab>
+				
+				<p:tab id="tab2" title="Datos Personales"  disabled="#{cRegArea.disabledTagV}" >
+					<h:form id="frmListado">
+					<p:focus  for="#{cRegArea.nomTxt}" />
+						
+						       <p:panel header="Datos Personales" style="font-size: 10px">
+						            	<h:panelGrid id="pnDatos" columns="2" columnClasses="alignRight,alignLeft">
+						            	
+						            	<h:outputLabel>Codigo</h:outputLabel>
+						            	<p:inputText id="txtCodigo" value="#{cRegArea.bean.alarea.co_area}" disabled="#{cRegArea.disabled}"></p:inputText>						            	
+ 										
+						        		<h:outputLabel>Descripcion</h:outputLabel>
+						            	<p:inputText id="txtDescripcion" value="#{cRegArea.bean.alarea.de_area}"></p:inputText>						            	
+ 										
+						            	<h:outputLabel value="Estado:" styleClass="ui-label-text" />
+										
+										 <p:selectOneMenu id="cboEstado"
+											value="#{cRegArea.bean.alarea.st_area}"
+											style="width: 200px;" panelStyle="width: 200px;"
+											required="true" requiredMessage="Seleccionar Estado">
+											<f:selectItem itemLabel="Seleccionar Estado" itemValue="" />
+											<f:selectItem itemLabel="Activo" itemValue="A" />
+											<f:selectItem itemLabel="Inactivo" itemValue="I" />
+										</p:selectOneMenu>
+										
+										
+						        	     </h:panelGrid> 	
+						     </p:panel>
+					
+					</h:form>
+					
+				</p:tab>
+		</p:tabView>
+		</h:form>
+		</p:dialog>
+</ui:composition>

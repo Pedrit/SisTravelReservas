@@ -1,0 +1,382 @@
+	<!--
+	 * Resumen. 
+	 * Descripción :pagina de inicio de la aplicacion.
+	 * Fecha de Creación : 15/01/2014 23:56:02
+	 * Autor : PROMERO.
+	 * =======================================================================
+	 * Modificaciones
+	 * Fecha            Nombre                     Descripción
+	 * =======================================================================
+	 * 
+	 -->
+	<!DOCTYPE html
+	        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:p="http://primefaces.org/ui"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	
+	
+	<p:dialog 	id="dlgPerfil" 
+			  	header=".:[Ventana - Perfiles] :." 
+			  	widgetVar="WGPerfil"
+				modal="false" 
+				appendTo="@(body)"
+		     	width="80%"
+		     	height="600"
+		     	showEffect="face" 
+		     	hideEffect="clip"
+				resizable="false" 
+				maximizable="true"
+				minimizable="true"
+				draggable="true"
+				position="center"
+				dynamic="true" 
+				closeOnEscape="true">	
+		
+		<h:form id="frmMantenimientoPerfil">
+			<p:toolbar id="tb">
+				<p:toolbarGroup align="left">
+		
+					<p:commandButton id="btnNuevo" 
+									 value="Nuevo"
+									 icon="ui-icon-document" 
+									 actionListener="#{cPerfil.nuevo}"
+									 process="frmMantenimientoPerfil"
+									 oncomplete="document.getElementById('#{cPerfil.focus}').focus()"
+								     update="#{cPerfil.update}" 
+								     immediate="true"
+								     global="false">
+						<p:resetInput target="#{cPerfil.resetInput}"  />  
+					</p:commandButton>
+		
+					<p:commandButton id="btnGuardar" 
+									 value="Guardar"
+									 icon="ui-icon-disk" 
+									 actionListener="#{cPerfil.guardar}"
+									 process="#{cPerfil.process}"
+									 update="#{cPerfil.updateForm}"
+									 partialSubmit="true">
+									 
+					<p:confirm header="Confirmación Guardar" 
+						   			 message="¿Estas Seguro de Grabar este REGISTRO?" 
+						              icon="ui-icon-alert" />
+									 
+					</p:commandButton>
+					
+					<p:separator />
+		
+					<p:commandButton title="Actualizar"
+								 	 icon="ui-icon-refresh"
+								 	 update=":frmMantenimientoPerfil:tvPerfiles:frmPerfil:dtPerfil,
+								 	 			  :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos" 
+									 process="@this"
+									 action="#{cPerfil.actualizar}" 
+									 global="false"/>
+		
+				<p:defaultCommand target="btnGuardar" /> 
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+					<p:menuButton value="Opciones">
+						<p:menuitem value="Reubicar Ventana" 
+									oncomplete="WGPerfil.initPosition();"
+									icon="ui-icon-newwin"/>
+						<p:menuitem value="ShowCase"
+							url="http://www.primefaces.org/showcase" />
+						<p:menuitem value="TouchFaces"
+							url="http://www.primefaces.org/showcase/touch" />
+					</p:menuButton>
+				</p:toolbarGroup>
+		
+			</p:toolbar>
+			<p:spacer height="10"/>
+			<p:tabView id="tvPerfiles">
+				<p:tab id="tab1" title="Listado">
+				<h:form id="frmPerfil">
+				<p:panel id="pnDatosPerfil" header="Datos del Perfil"  style="font-size: 10px">
+				
+				<p:panelGrid styleClass="ui-border-panel">
+					<p:row>  
+						<p:column styleClass="alignRight">
+							<h:outputLabel value="Nombre:" styleClass="ui-label-text" />
+				        </p:column>
+				        <p:column>
+				    		<p:inputText id="txtNombrePerfil" 
+										 value="#{cPerfil.bean.perfil.nom_perfil}"
+										 style="font-size: 10px" 
+										 size="30"
+										 required="true"
+										 requiredMessage="Nombre de Perfil NO Ingresado." />
+				        </p:column>
+				        <p:column styleClass="alignRight">
+							<h:outputLabel value="Descripción:" styleClass="ui-label-text" />
+				        </p:column>
+				        <p:column>
+				    		<p:inputText id="txtDescripcionPerfil" 
+										 value="#{cPerfil.bean.perfil.desc_perfil}"
+										 style="font-size: 10px" 
+										 size="100"
+										 required="true"
+										 requiredMessage="Descripción de Perfil NO Ingresado."  />
+				        </p:column>
+				    </p:row>
+				</p:panelGrid>
+				
+				</p:panel>
+				
+				<p:spacer height="10"/>
+				
+				<p:dataTable id="dtPerfil"
+								 var="perfil" 
+								 value="#{cPerfil.bean.lsPerfiles}" 
+								 style="font-size: 10px;" 
+								 selectionMode="single"
+								 selection="#{cPerfil.bean.perfilRowSelected}"
+								 rowKey="#{perfil.co_perfil}"
+								 rowIndexVar="rowIndex"
+								 paginator="true" 
+								 rows="15"  
+								 currentPageReportTemplate="Página {currentPage} de {totalPages} | Mostrando Registros del {startRecord} al {endRecord} de un Total de {totalRecords}"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		               			 rowsPerPageTemplate="5,10,15" 
+		               			 emptyMessage="Ningún Registro Encontrado.">
+			        <p:ajax event="page" global="false"/>
+			        <p:ajax event="rowSelect" 
+							listener="#{cPerfil.perfilRowSelected}" 
+							global="false"
+							update=":frmMantenimientoPerfil:tvPerfiles:frmPerfil:pnDatosPerfil,
+										  :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtModulo,
+										   :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:lblNombresPerfil"/> 
+								      			 
+			        <p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+						 <h:outputText value="#{rowIndex+1}" />
+					</p:column>
+		            <p:column headerText="Código">
+		            	<h:outputText value="#{perfil.co_perfil}" />
+		            </p:column>
+		            <p:column headerText="Nombre">
+		            	<h:outputText value="#{perfil.nom_perfil}" />
+		            </p:column>
+		            <p:column headerText="Descripción">
+		            	<h:outputText value="#{perfil.desc_perfil}" />
+		            </p:column>
+		            <p:column headerText="Fecha Registro" style="text-align: center;">
+		            	<h:outputText value="#{perfil.fe_usua_crea}" >
+		            	 <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+		            	</h:outputText>
+		            </p:column>
+		             
+			        
+		    	</p:dataTable>
+		    	</h:form>
+				</p:tab>
+				
+				<p:tab id="tab2" title="Asignaciones de Módulos" >
+				
+				<h:form id="frmAsignarModulos" >
+				<p:spacer height="10"/>
+				<p:outputLabel id="lblNombresPerfil" value="#{cPerfil.bean.perfilRowSelected.nom_perfil}" styleClass="ui-label-title"/>
+				 	
+					<p:separator/>
+					<p:spacer height="10"/>
+						 
+					<p:dataTable id="dtModulo"
+								 var="modulo" 
+								 value="#{cPerfil.bean.lsModulosPerfil}"
+								 selection="#{cPerfil.menu.moduloRowSelected}"
+								 selectionMode="single"
+								 rowKey="#{modulo.iCodMenu}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								  emptyMessage="Ningún Registro Encontrado.">
+						 
+						 <f:facet name="header" style="text-align: right;"> 
+					 		<h:panelGrid styleClass="ui-border-panel-title" columns="2" columnClasses="vAlignTopLeft,vAlignTopRight"> 
+					 			<h:outputText value="MODULOS ASIGNADOS" style="font-size: 12px;"/>
+	           			  		<p:commandButton   title="Agregar" 
+	           			  						 			    icon="ui-icon-circle-plus" 
+	           			  						 			    process="@this"
+	           			  						  			    oncomplete="if('#{cPerfil.bean.perfilRowSelected.co_perfil}' != '0') {PF('WGAsignarOpciones').show();}" 
+	           			  						  				action="#{cPerfil.asignarModulos}"
+	           			  						  			    update=":dlgAsignarOpciones"
+	           			  						  			    global="false"/>
+							</h:panelGrid>		           			   
+		        		</f:facet>
+		        		<p:ajax event="page" global="false"/>
+		        		<p:ajax event="rowSelect" 
+								listener="#{cPerfil.moduloRowSelected}" 
+								global="false"
+								update=":frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtModulo,
+											  :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtMenu,
+											  :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtSubMenu"/> 
+		        		
+		        		
+		        		<p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+							 <h:outputText value="#{rowIndex+1}" />
+						</p:column>
+		        		
+						<p:column headerText="Nombre" style="width: 20%">
+			            	<h:outputText value="#{modulo.vTituloMenu}" />
+			            </p:column>
+			            <p:column headerText="Descripción" >
+			            	<h:outputText value="#{modulo.vDescripcion}" />
+			            </p:column>
+			            
+			            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+			            	<h:outputText value="#{modulo.fe_usua_crea}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+			            	</h:outputText>
+			            </p:column>
+			            
+			             <f:facet name="footer" >
+			            	<p:spacer/>
+			            </f:facet> 
+				    </p:dataTable>
+					
+					<p:spacer height="10"/>
+				
+					<p:dataTable id="dtMenu"
+								 var="modulo" 
+								 value="#{cPerfil.bean.lsMenusPerfil}"
+								 selection="#{cPerfil.menu.menuRowSelected}"
+								 selectionMode="single"
+								 rowKey="#{modulo.iCodMenu}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								  emptyMessage="Ningún Registro Encontrado.">
+						 
+						 <f:facet name="header">  
+		           			  <h:panelGrid styleClass="ui-border-panel-title" columns="2" columnClasses="vAlignTopLeft,vAlignTopRight"> 
+					 			<h:outputText value="MENUS ASIGNADOS" style="font-size: 12px;"/>
+								<p:commandButton  title="Agregar" 
+	           			  						  icon="ui-icon-circle-plus" 
+	           			  						  oncomplete=" if('#{cPerfil.menu.moduloRowSelected.iCodMenu}' != '0') {PF('WGAsignarOpciones').show();}" 
+	           			  						  action="#{cPerfil.asignarMenus}"
+	           			  						  process="@this"
+	           			  						  update=":dlgAsignarOpciones"
+	           			  						  global="false"/>							
+	           			  	   </h:panelGrid>	 
+		        		</f:facet>
+		        		<p:ajax event="page" global="false"/>
+		        		<p:ajax event="rowSelect" 
+								listener="#{cPerfil.menuRowSelected}" 
+								update=":frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtSubMenu"
+								global="false"/> 
+		        		
+		        		<p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+							 <h:outputText value="#{rowIndex+1}" />
+						</p:column>
+		        		
+						<p:column headerText="Nombre" style="width: 20%">
+			            	<h:outputText value="#{modulo.vTituloMenu}" />
+			            </p:column>
+			            <p:column headerText="Descripción" >
+			            	<h:outputText value="#{modulo.vDescripcion}" />
+			            </p:column>
+			            
+			            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+			            	<h:outputText value="#{modulo.fe_usua_crea}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+			            	</h:outputText>
+			            </p:column>
+			            
+			             <f:facet name="footer" >
+			            	<p:spacer/>
+			            </f:facet> 
+				    </p:dataTable>
+
+			 		<p:spacer height="10"/>
+			 	
+			 		<p:dataTable id="dtSubMenu"
+								 var="modulo" 
+								 value="#{cPerfil.bean.lsSubMenusPerfil}"
+								 selection="#{cPerfil.menu.subMenuRowSelected}"
+								 selectionMode="single"
+								 rowKey="#{modulo.iCodMenu}" 
+								 rowIndexVar="rowIndex"
+								 style="font-size: 10px; width: 100%;"
+								  emptyMessage="Ningún Registro Encontrado.">
+						 
+						 <f:facet name="header">  
+		           			  <h:panelGrid styleClass="ui-border-panel-title" columns="2" columnClasses="vAlignTopLeft,vAlignTopRight"> 
+					 			<h:outputText value="SUB MENUS ASIGNADOS" style="font-size: 12px;"/>
+								<p:commandButton  title="Agregar" 
+	           			  						  icon="ui-icon-circle-plus" 
+	           			  						  oncomplete="if('#{cPerfil.menu.menuRowSelected.iCodMenu}' != '0') {PF('WGAsignarOpciones').show();}" 
+	           			  						  action="#{cPerfil.asignarSubMenus}"
+	           			  						  process="@this"
+	           			  						  update=":dlgAsignarOpciones"
+	           			  						  global="false"/>
+   							  </h:panelGrid>	 
+		        		</f:facet>
+		        		
+		        		<p:column headerText="Nro" styleClass="ui-state-default" style="width: 10px;">
+							 <h:outputText value="#{rowIndex+1}" />
+						</p:column>
+		        		
+						<p:column headerText="Nombre" style="width: 20%">
+			            	<h:outputText value="#{modulo.vTituloMenu}" />
+			            </p:column>
+			            
+			            <p:column headerText="Descripción" >
+			            	<h:outputText value="#{modulo.vDescripcion}" />
+			            </p:column>
+			            
+			            <p:column headerText="Fecha Registro" style="width: 20%; text-align: center;">
+			            	<h:outputText value="#{modulo.fe_usua_crea}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
+			            	</h:outputText>
+			            </p:column>
+			            
+			             <f:facet name="footer" >
+			            	<p:spacer/>
+			            </f:facet> 
+				    </p:dataTable>			    
+						 	
+						 	
+					</h:form>	 
+				</p:tab>
+			</p:tabView>	
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog   id="dlgAsignarOpciones" 
+			  	header=".:[Ventana - Asignar Opciones y Permisos :." 
+			  	widgetVar="WGAsignarOpciones"
+				modal="true" 
+				appendTo="@(body)"
+		     	showEffect="face" 
+		     	hideEffect="clip"
+				resizable="false" 
+				maximizable="false"
+				minimizable="false"
+				draggable="true"
+				position="center"
+				closeOnEscape="true"
+				dynamic="true">
+		<p:pickList id="pickList" 
+					value="#{cPerfil.bean.dlModulosPerfil}" 
+					var="modulo" 
+					itemLabel="#{modulo.vTituloMenu}" 
+					itemValue="#{modulo.iCodMenu}" >
+			<f:facet name="sourceCaption">Disponibles</f:facet>  
+			<f:facet name="targetCaption">Asignados</f:facet>
+			
+			<p:ajax event="transfer"
+						global="false" 
+						listener="#{cPerfil.registrarOpciones}" 
+						update=":frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtModulo,
+								      :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtMenu,
+								      :frmMantenimientoPerfil:tvPerfiles:frmAsignarModulos:dtSubMenu"/>  
+		</p:pickList>
+	</p:dialog>
+	
+	
+		
+	</ui:composition>
