@@ -48,7 +48,7 @@ IRegOrdenPlanificacionDao, InitializingBean{
 			
 			//ordenes.get().setCo_usua_crea(Utilitario.getUsuario());
 			
-			getJdbcTemplate().queryForInt(RegOrdenImplementacionConst.INSERT_DATOS_PERSONALES,
+			getJdbcTemplate().queryForInt(RegOrdenImplementacionConst.INSERT_DATOS_ORDENES,
 					ordenes.getOrdenes().getNu_orden_plani(),					 
 					ordenes.getOrdenes().getDe_descripcion(),					
 					ordenes.getOrdenes().getDe_responsable(),
@@ -83,13 +83,15 @@ IRegOrdenPlanificacionDao, InitializingBean{
 	
 	@Override
 	public String ObtenerCodigoGenerado() {
-		String codigoG = "";
-		int cod = 0;
+		String cod_generado = "";
+		int codigo=0;
+		
 		try {
 
-			cod  = getJdbcTemplate().queryForInt(RegOrdenImplementacionConst.OBTENER_CODIGO_GENERADO);
-			codigoG = Integer.toString(cod);
-			System.out.println(" codigo_generado:  " + codigoG );
+			codigo  = getJdbcTemplate().queryForInt(RegOrdenImplementacionConst.GENERAR_CODIGO_ORDEN);
+			cod_generado= Integer.toString(codigo);
+			
+			System.out.println(" codigo_generado:  " + cod_generado );
 			
 		} catch (DataAccessException e) {
 			System.out.println("ERROR: " + e.getMessage());
@@ -99,7 +101,7 @@ IRegOrdenPlanificacionDao, InitializingBean{
 			depurador.error(e.getMessage());
 		}
 		
-		return codigoG ;
+		return cod_generado ;
 	}
 	
 
