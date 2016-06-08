@@ -37,6 +37,9 @@ IRegOrdenPlanificacionDao, InitializingBean{
 	
 	@Override
 	public String insertDatosPersonales(OrdenPlanificacion ordenes) {
+		
+		//===== New 
+		
 		String msj = "";
 		try {
 			System.out.println("cod solicitud" + ordenes.getOrdenes().getCo_orden_desti());
