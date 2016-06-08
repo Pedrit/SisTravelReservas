@@ -44,13 +44,12 @@ IRegOrdenPlanificacionDao, InitializingBean{
 		
 		String msj = "";
 		try {
-			System.out.println("cod solicitud" + ordenes.getOrdenes().getCo_orden_desti());
+			System.out.println("cod solicitud" + ordenes.getOrdenes().getNu_orden_plani());
 			
 			//ordenes.get().setCo_usua_crea(Utilitario.getUsuario());
 			
 			getJdbcTemplate().queryForInt(RegOrdenImplementacionConst.INSERT_DATOS_PERSONALES,
-					ordenes.getOrdenes().getNu_orden_plani(),
-					ordenes.getOrdenes().getCo_orden_desti(), 
+					ordenes.getOrdenes().getNu_orden_plani(),					 
 					ordenes.getOrdenes().getDe_descripcion(),					
 					ordenes.getOrdenes().getDe_responsable(),
 					ordenes.getOrdenes().getNu_coti_rel(),

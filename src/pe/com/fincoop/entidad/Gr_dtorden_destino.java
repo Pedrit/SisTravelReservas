@@ -8,6 +8,7 @@ public class Gr_dtorden_destino implements Serializable {
 	private static final long serialVersionUID = 1L; 
 	
 	private String co_orden_desti;
+	private String nu_orden_plani;
 	private String de_destino;
 	private String de_pais;
 	private String de_obs;
@@ -22,6 +23,14 @@ public class Gr_dtorden_destino implements Serializable {
 	}
 	public void setCo_orden_desti(String co_orden_desti) {
 		this.co_orden_desti = co_orden_desti;
+	}
+	
+		
+	public String getNu_orden_plani() {
+		return nu_orden_plani;
+	}
+	public void setNu_orden_plani(String nu_orden_plani) {
+		this.nu_orden_plani = nu_orden_plani;
 	}
 	public String getDe_destino() {
 		return de_destino;

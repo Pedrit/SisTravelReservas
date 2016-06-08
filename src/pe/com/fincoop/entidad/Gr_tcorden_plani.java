@@ -6,7 +6,7 @@ public class Gr_tcorden_plani implements Serializable{
 
 	private static final long serialVersionUID = 3218618108450884897L; 
 	
-	private String co_orden_desti;
+	private String nu_orden_plani;	
 	private String de_descripcion;
 	private String de_responsable;
 	private String nu_coti_rel;
@@ -28,19 +28,14 @@ public class Gr_tcorden_plani implements Serializable{
 	private Timestamp fe_usua_modi;
 	
 	
-	private String nu_orden_plani;
+	
 	public String getNu_orden_plani() {
 		return nu_orden_plani;
 	}
 	public void setNu_orden_plani(String nu_orden_plani) {
 		this.nu_orden_plani = nu_orden_plani;
 	}
-	public String getCo_orden_desti() {
-		return co_orden_desti;
-	}
-	public void setCo_orden_desti(String co_orden_desti) {
-		this.co_orden_desti = co_orden_desti;
-	}
+	
 	public String getDe_descripcion() {
 		return de_descripcion;
 	}
