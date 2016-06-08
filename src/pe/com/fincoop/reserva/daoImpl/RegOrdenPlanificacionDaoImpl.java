@@ -40,6 +40,8 @@ IRegOrdenPlanificacionDao, InitializingBean{
 		
 		//===== New 
 		
+		
+		
 		String msj = "";
 		try {
 			System.out.println("cod solicitud" + ordenes.getOrdenes().getCo_orden_desti());
