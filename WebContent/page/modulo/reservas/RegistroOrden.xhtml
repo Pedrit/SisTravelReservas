@@ -302,7 +302,35 @@
 						
 						</p:panel>
 									
-						
+						<p:panelGrid columns="6"
+								columnClasses="alignRight,alignLeft,alignLeft"
+								styleClass="ui-border-panel">
+								
+							<h:outputLabel value="Tipo Hotel:" styleClass="ui-label-text" />
+							
+							<p:selectOneMenu required="true"  id="cboTipoHotel"   style="font-size: 10px ; width:140px;">
+					  			<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>				     			
+					    					
+					    	</p:selectOneMenu>
+					    	
+					    	<h:outputLabel value="Cantidad adultos :" styleClass="ui-label-text" />
+					    	
+							<p:inputText   id="txtcantAdultos" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:50px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+							</p:inputText>
+							
+							<h:outputLabel value="Cantidad Niños :" styleClass="ui-label-text" />
+					    	
+							<p:inputText   id="txtcantNiños" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:50px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+							</p:inputText>
+							
+								
+						</p:panelGrid>
 						
 					</p:panel>
 					
