@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<p:dialog	id="dlgBuscarDestinos"
+            header=".:[Ventana - Buscar Destinos]:."
+            widgetVar="WGBuscarDestinos" 
+			appendTo="@(body)" 
+	     	modal="true"
+	     	width="600" 
+	     	height="400" 
+	     	showEffect="face" 
+	     	hideEffect="clip"
+			resizable="false" 
+			maximizable="false"
+			minimizable="false">
+			
+		
+	<h:form id="frmBuscarDestinos">
+	
+		<p:panel header="Buscar Destinos" style="font-size: 10px">
+		
+			<h:panelGrid columns="6" 
+						 columnClasses="alignRight,alignLeft">
+						 
+				<h:outputLabel value="Ingresar busqueda :" styleClass="ui-label-text" />
+					<p:inputText 	id="txtFiltro"	
+										 
+							     	size="70">
+			 			<p:ajax 	event="keyup"			 						 
+									update=":frmBuscarDestinos:dtbDestinos" 
+									process="@this,txtFiltro" 
+									global="false" >
+						</p:ajax>
+							
+					</p:inputText>	
+					
+					<p:watermark for="txtFiltro"	value="Busqueda por Código/Descripción " /> 
+						<p:commandButton id="btnBuscarPor" 
+										 icon="ui-icon-search"
+										 										 
+										 process="@this,txtFiltro"
+										 global="false"
+										 oncomplete="document.getElementById('#{cGenerico.focus}').focus()" >
+						</p:commandButton>		 	 
+		
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			<p:separator/>
+			<p:spacer height="10"/>
+			
+			<p:dataTable id="dtbDestinos"
+					     var="tipo"
+					     paginator="true"
+					     rows="6"					     
+					     style="font-size:10px; width:100%;"
+					     rowIndexVar="rowIndex"
+					     rowKey=""
+	 	 			  	 selectionMode="single">
+					     <p:ajax event="page" global="false"/>	 
+						 <p:ajax event="rowSelect" 
+								 
+								 global="false"									    
+								
+								 process="@this"
+							     /> 								  
+				<f:facet name="header"> Resultado de la Busqueda </f:facet>  
+ 				<p:column headerText="Codigo Destino">
+		       	 
+		      	</p:column>
+             	 <p:column headerText="Destino">	 
+             	 		      
+             	  </p:column> 						
+			</p:dataTable>
+			
+			<p:commandButton id="btnAceptar" value="Aceptar"  oncomplete="WGBuscarDestinos.hide()"  
+								action="#{cGenerico.limpiarTipoDocu}" 
+								update=":frmBuscarDestinos:dtbDestinos,:frmRegistroOrdenes:tvRegistroOrdenes:frmDestinos:dtDocRecepDestino"
+								process="@this" global="false">
+																									 	 												
+					</p:commandButton>     		    			
+			 	<p:commandButton 	id="btnCancelar" 	
+			 						value="Cancelar" title="Cancelar" icon="ui-icon-close"  
+			 						oncomplete="WGBuscarDestinos.hide()" 
+			 									
+			 						update=":frmBuscarDestinos:dtbDestinos"/>			
+			 	
+		
+		</p:panel>
+		
+	</h:form>		
+			
+</p:dialog>
+
+</ui:composition>
