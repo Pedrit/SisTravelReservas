@@ -10,8 +10,18 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<style media="screen" type="text/css">
 
-	<p:dialog 	id="dlgRegistroOrdenes" 
+.botones{
+	display: inline-block;
+	position: relative;
+	left: 0px;
+	top: -2px;
+</style>
+
+
+	<p:dialog id="dlgRegistroOrdenes" 
 		  	header=".:[Ventana - Registro de Orden de Planificacion] :." 
 		  	widgetVar="WGRegistroOrdenes"
 			modal="false" 
@@ -80,7 +90,7 @@
 			
 			<p:tabView id="tvRegistroOrdenes">
 				<p:ajax event="tabChange" 
-						listener="#{cMenu.onChangeTabView}" 
+						listener="#{cRegOrdenes.onChangeTabView}" 
 						immediate="true"
 						global="false"
 						update=":frmRegistroOrdenes:btnNuevo,
@@ -104,11 +114,11 @@
 		    	   				<p:column>
 		    						<p:inputText   id="txtDescripcion" 		    		               
 		    					    	style="font-size: 10px; text-transform: uppercase;
-		    					    	width:650px;" size="25" required="true"
+		    					    	width:580px;" size="25" required="true"
 							 	 		requiredMessage="Ingrese Descripción de Orden">
 									<p:ajax  global="false" update="@this"  event="blur" />
 									</p:inputText>
-		    				</p:column>
+		    					</p:column>
 		    			
 						</h:panelGrid>
 						
@@ -173,7 +183,7 @@
 		    	   				<p:column>
 		    						<p:inputText   id="txtdescCotizacion" 		    		               
 		    					    style="font-size: 10px; text-transform: uppercase;
-		    					    width:600px;" size="25" required="true">
+		    					    width:550px;" size="25" required="true">
 									<p:ajax  global="false" update="@this"  event="blur" />
 									</p:inputText>
 		    					</p:column>
@@ -195,7 +205,7 @@
 		    	   				<p:column>
 		    						<p:inputText   id="txtCliente" 		    		               
 		    					    style="font-size: 10px; text-transform: uppercase;
-		    					    width:600px;" size="25" required="true">
+		    					    width:550px;" size="25" required="true">
 									<p:ajax  global="false" update="@this"  event="blur" />
 									</p:inputText>
 		    					</p:column>
@@ -269,40 +279,24 @@
 											
 						</h:panelGrid>
 						
-							<p:panel header ="Agregar Destinos" style="font-size: 10px; text-transform:uppercase;">
+								 						
+								<h:form id="frmDestinos" >
+									<p:panel 	header="Agregar Destinos" style="font-size: 10px">
+										<h:panelGrid columns="2" style="width: 100%;">
 						
-								<p:panelGrid 	columns="3"
-												columnClasses="alignRight,alignLeft,alignLeft"
-												styleClass="ui-border-panel">
-								
-							<h:outputLabel value="Destino:" styleClass="ui-label-text" />
-							
-							<p:selectOneMenu required="true"  id="cboDestino"   style="font-size: 10px ; width:160px;">
-					  				<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
-					     			
-					    	</p:selectOneMenu>
-					    	
-					    	<p:commandButton 	title="btnBuscar" 
-												value="Añadir" 
-												icon="ui-icon-search"  
-												process="@this,rbcotizacion" 													 
-												update=":frmRegistroOrdenes:tvRegistroOrdenes"
-												global="false">
-							</p:commandButton>
-					    		
-						</p:panelGrid>
-						
-								<p:dataTable  	id="tblDestino"
-												var="linea"	 	 			  				 	 		
-									    		paginator="true"	 	 			
-	 	 			  							rows="5"
-	 	 			  							style="font-size:10px; width:100%;"
-	 	 			  							rowIndexVar="rowIndex"			  
-	 	 			  							selectionMode="single" 										  
-												currentPageReportTemplate="Página {currentPage} de {totalPages}"
-			                 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-			                 					rowsPerPageTemplate="5,10,15" >
-			                 					<p:ajax event="page" global="false"/>	 
+										<p:dataTable id="dtDocRecepDestino"			
+											var="recepcionado" 										
+											style="width: 95%; 
+											font-size: 10px; 
+											padding-top: 20px;"											 
+											rowIndexVar="rowIndex"
+											desplazable = "true"  
+											scrollHeight = "150"
+											rows="10"								
+											emptyMessage="Ningún Registro Encontrado."										 								 
+											selectionMode="single"> 
+											
+			                 						 
 							  					<p:ajax event="rowSelect" 										
 												global="false"									    
 										
@@ -322,9 +316,44 @@
 										
 										<p:column headerText="Eliminar">								 			
 										</p:column>   
-			             	</p:dataTable>
+			             			</p:dataTable>
+			             			
+			             			<h:panelGrid id = "pngAgrDestinos" columns="1" style="width: 100%;">
+			             			
+			             				
+			             				<p:commandButton  	title="Agregar" label="Agregar"														
+															icon="ui-icon-disk" />
+															
+										<p:commandButton  	title="Delete" label="Agregar"														
+															icon="ui-icon-disk" />
+										
+			             			 
+			             			</h:panelGrid>	
+																		
+									
+									<!--
+										<p:commandButton  	title="Agregar" label="Agregar" 
+															onclick="WGBuscarDestinos.show();"
+															update=":frmBuscarDestinos:dtbDestinos"
+															icon="ui-icon-document" >
+										</p:commandButton>
+									
+										<p:commandButton 	title="Eliminar"   
+															label="Eliminar" 
+															icon="ui-icon-trash"															
+															disabled="#{cRegSolicitudPrestamoPm.activa}"
+															update=":frmRegistroOrdenes:WGRegistroOrdenes:frmBuscarDestinos:dtbDestinos"
+															process="@this">
+														<p:confirm  header="Alerta" message="Esta seguro que desea Eliminar el registro Seleccionado?"></p:confirm>
+										</p:commandButton>
+									-->
+			             			
+			             	
+			             			</h:panelGrid>
+			             		</p:panel>
+			             	</h:form>
 						
-							</p:panel>
+							
 									
 							<p:panelGrid columns="6"
 								columnClasses="alignRight,alignLeft,alignLeft"
@@ -461,7 +490,7 @@
 								<h:column>	
 								<p:inputText   	id="txtobservaciones" 		    		               
 		    					    			style="font-size: 10px; text-transform: uppercase;
-		    					    			width:600px;" size="25" required="true">
+		    					    			width:550px;" size="25" required="true">
 									<p:ajax  global="false" update="@this"  event="blur" />
 								</p:inputText>				
 								</h:column>	
