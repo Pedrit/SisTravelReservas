@@ -16,7 +16,7 @@
 		  	widgetVar="WGRegistroOrdenes"
 			modal="false" 
 			appendTo="@(body)"
-	     	width="80%"
+	     	width="85%"
 	     	height="550"
 	     	showEffect="face" 
 	     	hideEffect="clip"
@@ -88,100 +88,224 @@
 								:frmRegistroOrdenes:tvRegistroOrdenes"/> 
 				
 					
-				<p:tab  id="tab0" title="Datos Generales">
+				<p:tab  id="tab0" title="Registrar Orden Planificacion">
 				
 					<h:form  id="frmDatosGenerales">
 					
-						<p:panel style="font-size: 10px; text-transform:uppercase;">
+						<p:panel header ="Datos Generales" style="font-size: 10px; text-transform:uppercase;">
+					
 						
-							<p:panel header="Datos Registro de Orden Planificacion"	 style="font-size: 10px; text-transform:uppercase;">
+						<h:panelGrid 	columns="2"
+										columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+										styleClass="ui-border-panel">
+										
+							<p:column>
+			    				<h:outputLabel value="Descripcion:" styleClass="ui-label-text" />
+				    		</p:column>
+		    	   			<p:column>
+		    					<p:inputText   id="txtDescripcion" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:650px;" size="25" required="true"
+							 	 	requiredMessage="Ingrese Descripción de Orden">
+									<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>
+		    				</p:column>
+		    			
+						</h:panelGrid>
 						
-								<h:panelGrid 	columns="4"
-												columnClasses="alignRight,alignLeft,alignRight,alignLeft"
-												styleClass="ui-border-panel">
-												
-									<p:column>
-						    			<h:outputLabel value="Nro Orden :" styleClass="ui-label-text" />
-						    		</p:column>
-						    		<p:column>
-						    			<p:inputText   id="txtNroOrden"						    		               
-						    					   style="font-size: 10px; text-transform: uppercase;" 
-												   size="10" 
-												   required="true"
-											 	   requiredMessage="Ingrese Nro de Orden.">
-										<p:ajax  global="false" update="@this"  event="blur" />
-										</p:inputText>
-									</p:column>
-									
-									<p:column>
-						    			<h:outputLabel value="Descripcion :" styleClass="ui-label-text" />
-						    		</p:column>
-						    		<p:column>
-						    			<p:inputText   id="txtDescripcion"						    		               
-						    					   style="font-size: 10px; text-transform: uppercase;" 
-												   size="50" 
-												   required="true"
-											 	   requiredMessage="Ingrese Descripcion de Orden.">
-										<p:ajax  global="false" update="@this"  event="blur" />
-										</p:inputText>
-									</p:column>
-									
-									<p:column>
-										<div style="position: relative; display: inline-block;">
-								    		<h:selectBooleanCheckbox 
-													style="margin-left: 24px;
-													top: 5px;position: relative;"
-													onclick="return false;">
-											</h:selectBooleanCheckbox>
-										</div>
-										<h:outputLabel value="Programa Nacional" styleClass="ui-label-text" />
-									</p:column>
-									
-									<p:column>
-										<div style="position: relative; display: inline-block;">
-								    		<h:selectBooleanCheckbox 
-													style="margin-left: 24px;
-													top: 5px;position: relative;"
-													onclick="return false;">
-											</h:selectBooleanCheckbox>
-										</div>
-										<h:outputLabel value="Programa Internacional" styleClass="ui-label-text" />
-									</p:column>
-									
+						
+						<p:panelGrid columns="5"
+								columnClasses="alignRight,alignLeft,alignLeft"
+								styleClass="ui-border-panel">
 								
-									<p:column>
-						    			<h:outputLabel  value="Tiempo Duracion :"
-						    							styleClass="ui-label-text" />
-						    		</p:column>
-						    	
-						        	<p:column>
-						 				<p:selectOneMenu required="true"  id="cboTiempoDurac"   style="font-size: 10px ; width:200px;">
-					  							<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
-					     						<f:selectItem     itemLabel="Corto" itemValue="Corto"></f:selectItem>
-					    						<f:selectItem     itemLabel="Mediano" itemValue="Mediano" ></f:selectItem>
-					    						<f:selectItem     itemLabel="Largo" itemValue="Largo" ></f:selectItem>
-					    					
-					    				</p:selectOneMenu>	
-						    		</p:column>
+							<h:outputLabel value="Origen Orden:" styleClass="ui-label-text" />
+						
+							<p:selectOneRadio   
+									id="rbcotizacion" 
+									requiredMessage="Seleccione Cotizacion" >	
+									<f:selectItem itemLabel="Cotizacion" itemValue="J" />
+									<p:ajax  global="false"  />
+								</p:selectOneRadio>
 								
+							<p:selectOneRadio   
+									id="rbcliente" 
+									requiredMessage="Seleccione Cliente" >	
+									<f:selectItem itemLabel="Cliente" itemValue="J" />
+									<p:ajax  global="false"  />
+								</p:selectOneRadio>
+							
+							<p:selectOneRadio   
+									id="rbninguno" 
+									requiredMessage="Seleccione Ninguno" >	
+									<f:selectItem itemLabel="Ninguno" itemValue="J" />
+									<p:ajax  global="false"  />
+								</p:selectOneRadio>
 								
-								
-								</h:panelGrid>
+								<p:column style="width: 30%">
+									<p:commandButton title="btnBuscar" 
+													  value="Buscar" 
+													  icon="ui-icon-search"  
+													  process="@this,rbcotizacion" 													 
+													  update=":frmRegistroOrdenes:tvRegistroOrdenes"
+													  global="false">
+									</p:commandButton>
+							</p:column>
+						</p:panelGrid>
+						
+						<p:panel header ="Datos Cotizacion Cliente" style="font-size: 10px; text-transform:uppercase;">
 						
 						
-						
-						
-							</p:panel>						
-							
-							<p:panel header="Agregar Destinos">
-							
-							
-							
-							
-							</p:panel>
+							<h:panelGrid 	columns="2"
+											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+											styleClass="ui-border-panel">
+										
+								<p:column>
+			    					<h:outputLabel value="Nro Cotizacion:" styleClass="ui-label-text" />
+				    			</p:column>
+		    	   				<p:column>
+		    						<p:inputText   id="txtCotizacion" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:100px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+									</p:inputText>
+		    					</p:column>
+		    					
+		    					<p:column>
+			    					<h:outputLabel value="Descripcion:" styleClass="ui-label-text" />
+				    			</p:column>
+		    	   				<p:column>
+		    						<p:inputText   id="txtdescCotizacion" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:600px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+									</p:inputText>
+		    					</p:column>
+		    					
+		    					<p:column>
+			    					<h:outputLabel value="Doc. Identidad:" styleClass="ui-label-text" />
+				    			</p:column>
+		    	   				<p:column>
+		    						<p:inputText   id="txtDocIdentidad" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:150px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+									</p:inputText>
+		    					</p:column>
+		    					
+		    					<p:column>
+			    					<h:outputLabel value="Cliente:" styleClass="ui-label-text" />
+				    			</p:column>
+		    	   				<p:column>
+		    						<p:inputText   id="txtCliente" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:600px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+									</p:inputText>
+		    					</p:column>
+		    			
+						</h:panelGrid>
 						
 						
 						</p:panel>
+						
+						<h:panelGrid 	columns="3"
+											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+											styleClass="ui-border-panel">
+											
+							<h:outputLabel value="Tipo de Programa:" styleClass="ui-label-text" />
+						
+							<p:selectOneRadio   
+									id="rbnacional" 
+									requiredMessage="Seleccione Cotizacion" >	
+									<f:selectItem itemLabel="Nacional" itemValue="J" />
+									<p:ajax  global="false"  />
+								</p:selectOneRadio>
+								
+							<p:selectOneRadio   
+									id="rbinternacional" 
+									requiredMessage="Seleccione Cliente" >	
+									<f:selectItem itemLabel="Internacional" itemValue="J" />
+									<p:ajax  global="false"  />
+							</p:selectOneRadio>
+								
+							<h:outputLabel value="Tiempo Duracion:" styleClass="ui-label-text" />
+														
+		    				<p:selectOneMenu required="true"  id="cboTiempoDurac"   style="font-size: 10px ; width:140px;">
+					  				<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
+					     			<f:selectItem     itemLabel="Corto" itemValue="Corto"></f:selectItem>
+					    			<f:selectItem     itemLabel="Mediano" itemValue="Mediano" ></f:selectItem>
+					    			<f:selectItem     itemLabel="Largo" itemValue="Largo" ></f:selectItem>
+					    					
+					    	</p:selectOneMenu>
+					    	
+					    	<h:outputLabel value="de min - Max Dias:" styleClass="ui-label-text" />
+
+		    													
+											
+						</h:panelGrid>	
+						
+						<p:panel header ="Agregar Destinos" style="font-size: 10px; text-transform:uppercase;">
+						
+						<p:panelGrid columns="3"
+								columnClasses="alignRight,alignLeft,alignLeft"
+								styleClass="ui-border-panel">
+								
+							<h:outputLabel value="Destino:" styleClass="ui-label-text" />
+							
+							<p:selectOneMenu required="true"  id="cboDestino"   style="font-size: 10px ; width:160px;">
+					  				<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
+					     			
+					    	</p:selectOneMenu>
+					    	
+					    	<p:commandButton 	title="btnBuscar" 
+												value="Añadir" 
+												icon="ui-icon-search"  
+												process="@this,rbcotizacion" 													 
+												update=":frmRegistroOrdenes:tvRegistroOrdenes"
+												global="false">
+							</p:commandButton>
+					    		
+						</p:panelGrid>
+						
+						
+						<p:dataTable  	id="tblDestino"
+										var="linea"	 	 			  				 	 		
+									    paginator="true"	 	 			
+	 	 			  					rows="5"
+	 	 			  					style="font-size:10px; width:100%;"
+	 	 			  					rowIndexVar="rowIndex"			  
+	 	 			  					selectionMode="single" 										  
+										currentPageReportTemplate="Página {currentPage} de {totalPages}"
+			                 			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+			                 			rowsPerPageTemplate="5,10,15" >
+			                 			<p:ajax event="page" global="false"/>	 
+							  			<p:ajax event="rowSelect" 										
+										global="false"									    
+										
+										
+										update=":frmRegistroOrdenes:tvRegistroOrdenes,
+											    :frmRegistroOrdenes:tvRegistroOrdenes:frmDatosGenerales"/>
+											    
+										<p:column headerText="Orden" styleClass="ui-state-default" style="width: 10px;">
+											<h:outputText value="#{rowIndex+1}" />
+										</p:column>	
+										
+										<p:column headerText="Pais">								 			
+										</p:column> 
+										
+										<p:column headerText="Destino">								 			
+										</p:column> 
+										
+										<p:column headerText="Eliminar">								 			
+										</p:column>   
+			             </p:dataTable>
+						
+						</p:panel>
+									
+						
+						
+					</p:panel>
+					
 					
 					</h:form>
 				
