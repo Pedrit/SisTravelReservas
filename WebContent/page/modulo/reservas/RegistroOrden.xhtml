@@ -16,7 +16,7 @@
 		  	widgetVar="WGRegistroOrdenes"
 			modal="false" 
 			appendTo="@(body)"
-	     	width="85%"
+	     	width="80%"
 	     	height="550"
 	     	showEffect="face" 
 	     	hideEffect="clip"
@@ -94,27 +94,25 @@
 					
 						<p:panel header ="Datos Generales" style="font-size: 10px; text-transform:uppercase;">
 					
-						
-						<h:panelGrid 	columns="2"
-										columnClasses="alignRight,alignLeft,alignRight,alignLeft"
-										styleClass="ui-border-panel">
+							<h:panelGrid 	columns="2"
+											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+											styleClass="ui-border-panel">
 										
-							<p:column>
-			    				<h:outputLabel value="Descripcion:" styleClass="ui-label-text" />
-				    		</p:column>
-		    	   			<p:column>
-		    					<p:inputText   id="txtDescripcion" 		    		               
-		    					    style="font-size: 10px; text-transform: uppercase;
-		    					    width:650px;" size="25" required="true"
-							 	 	requiredMessage="Ingrese Descripción de Orden">
+								<p:column>
+			    					<h:outputLabel value="Descripcion:" styleClass="ui-label-text" />
+				    			</p:column>
+		    	   				<p:column>
+		    						<p:inputText   id="txtDescripcion" 		    		               
+		    					    	style="font-size: 10px; text-transform: uppercase;
+		    					    	width:650px;" size="25" required="true"
+							 	 		requiredMessage="Ingrese Descripción de Orden">
 									<p:ajax  global="false" update="@this"  event="blur" />
-								</p:inputText>
+									</p:inputText>
 		    				</p:column>
 		    			
 						</h:panelGrid>
 						
-						
-						<p:panelGrid columns="5"
+							<p:panelGrid   columns="5"
 								columnClasses="alignRight,alignLeft,alignLeft"
 								styleClass="ui-border-panel">
 								
@@ -152,12 +150,11 @@
 							</p:column>
 						</p:panelGrid>
 						
-						<p:panel header ="Datos Cotizacion Cliente" style="font-size: 10px; text-transform:uppercase;">
+							<p:panel header ="Datos Cotizacion Cliente" style="font-size: 10px; text-transform:uppercase;">
 						
-						
-							<h:panelGrid 	columns="2"
-											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
-											styleClass="ui-border-panel">
+								<h:panelGrid 	columns="2"
+												columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+												styleClass="ui-border-panel">
 										
 								<p:column>
 			    					<h:outputLabel value="Nro Cotizacion:" styleClass="ui-label-text" />
@@ -205,10 +202,9 @@
 		    			
 						</h:panelGrid>
 						
+							</p:panel>
 						
-						</p:panel>
-						
-						<h:panelGrid 	columns="3"
+							<h:panelGrid 	columns="3"
 											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
 											styleClass="ui-border-panel">
 											
@@ -228,27 +224,56 @@
 									<p:ajax  global="false"  />
 							</p:selectOneRadio>
 								
-							<h:outputLabel value="Tiempo Duracion:" styleClass="ui-label-text" />
-														
-		    				<p:selectOneMenu required="true"  id="cboTiempoDurac"   style="font-size: 10px ; width:140px;">
-					  				<f:selectItem     itemLabel="Seleccione" itemValue="" ></f:selectItem>
-					     			<f:selectItem     itemLabel="Corto" itemValue="Corto"></f:selectItem>
-					    			<f:selectItem     itemLabel="Mediano" itemValue="Mediano" ></f:selectItem>
-					    			<f:selectItem     itemLabel="Largo" itemValue="Largo" ></f:selectItem>
-					    					
-					    	</p:selectOneMenu>
-					    	
-					    	<h:outputLabel value="de min - Max Dias:" styleClass="ui-label-text" />
-
-		    													
 											
 						</h:panelGrid>	
 						
-						<p:panel header ="Agregar Destinos" style="font-size: 10px; text-transform:uppercase;">
+							<h:panelGrid 	columns="5"
+											columnClasses="alignRight,alignLeft,alignRight,alignLeft"
+											styleClass="ui-border-panel">
+											
+							
+							<h:outputLabel style="margin-left: 49px;" value="Fecha Servicio" styleClass="ui-label-text" />
+							<p:row>
+							<p:calendar id="calFechaDesde" style="font-size: 10px;"
+									size="20" 									
+									pattern="dd/MM/yyyy" showOn="button" navigator="true"
+									maxlength="10"   readonlyInput="true"
+									showButtonPanel="true">
+								<p:ajax event="dateSelect" process="@this"></p:ajax>
+							</p:calendar>
+							
+							<h:outputLabel value="Hasta :"
+											styleClass="ui-label-text" />
+							
+							
+							<p:calendar id="calFechaHasta" style="font-size: 10px;"
+									size="20" 									
+									pattern="dd/MM/yyyy" showOn="button" navigator="true"
+									maxlength="10"   readonlyInput="true"
+									showButtonPanel="true">
+								<p:ajax event="dateSelect" process="@this"></p:ajax>
+							</p:calendar>
+							
+							
+							</p:row>
+							
+							<h:outputLabel value="Cant. Dias :"
+											styleClass="ui-label-text" />
+											
+							<p:inputText   id="txtcantDias" 		    		               
+		    					    style="font-size: 10px; text-transform: uppercase;
+		    					    width:50px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+							</p:inputText>
+							
+											
+						</h:panelGrid>
 						
-						<p:panelGrid columns="3"
-								columnClasses="alignRight,alignLeft,alignLeft"
-								styleClass="ui-border-panel">
+							<p:panel header ="Agregar Destinos" style="font-size: 10px; text-transform:uppercase;">
+						
+								<p:panelGrid 	columns="3"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
 								
 							<h:outputLabel value="Destino:" styleClass="ui-label-text" />
 							
@@ -267,20 +292,19 @@
 					    		
 						</p:panelGrid>
 						
-						
-						<p:dataTable  	id="tblDestino"
-										var="linea"	 	 			  				 	 		
-									    paginator="true"	 	 			
-	 	 			  					rows="5"
-	 	 			  					style="font-size:10px; width:100%;"
-	 	 			  					rowIndexVar="rowIndex"			  
-	 	 			  					selectionMode="single" 										  
-										currentPageReportTemplate="Página {currentPage} de {totalPages}"
-			                 			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-			                 			rowsPerPageTemplate="5,10,15" >
-			                 			<p:ajax event="page" global="false"/>	 
-							  			<p:ajax event="rowSelect" 										
-										global="false"									    
+								<p:dataTable  	id="tblDestino"
+												var="linea"	 	 			  				 	 		
+									    		paginator="true"	 	 			
+	 	 			  							rows="5"
+	 	 			  							style="font-size:10px; width:100%;"
+	 	 			  							rowIndexVar="rowIndex"			  
+	 	 			  							selectionMode="single" 										  
+												currentPageReportTemplate="Página {currentPage} de {totalPages}"
+			                 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+			                 					rowsPerPageTemplate="5,10,15" >
+			                 					<p:ajax event="page" global="false"/>	 
+							  					<p:ajax event="rowSelect" 										
+												global="false"									    
 										
 										
 										update=":frmRegistroOrdenes:tvRegistroOrdenes,
@@ -298,11 +322,11 @@
 										
 										<p:column headerText="Eliminar">								 			
 										</p:column>   
-			             </p:dataTable>
+			             	</p:dataTable>
 						
-						</p:panel>
+							</p:panel>
 									
-						<p:panelGrid columns="6"
+							<p:panelGrid columns="6"
 								columnClasses="alignRight,alignLeft,alignLeft"
 								styleClass="ui-border-panel">
 								
@@ -332,7 +356,116 @@
 								
 						</p:panelGrid>
 						
-					</p:panel>
+							<p:panel header ="Otros Aspectos" style="font-size: 10px; text-transform:uppercase;">
+						
+								<p:panelGrid 	columns="6"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
+								
+									<h:selectBooleanCheckbox disabled="false"											
+															style="margin-left: 25px;">
+									</h:selectBooleanCheckbox>		
+									<h:outputLabel value="Seguro Medico" styleClass="ui-label-text"
+											style="margin-left: 10px;margin-right: 22px;" />	
+									
+									<h:selectBooleanCheckbox disabled="false"											
+															style="margin-left: 25px;">
+									</h:selectBooleanCheckbox>		
+									<h:outputLabel value="Restaurante" styleClass="ui-label-text"
+											style="margin-left: 10px;margin-right: 22px;" />
+											
+									<h:selectBooleanCheckbox disabled="false"											
+															style="margin-left: 25px;">
+									</h:selectBooleanCheckbox>		
+									<h:outputLabel value="Pasaje Aereo" styleClass="ui-label-text"
+											style="margin-left: 10px;margin-right: 22px;" />
+					    						    	
+					    		</p:panelGrid>
+					    		
+					    		<p:panelGrid 	columns="4"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
+								
+									<h:selectBooleanCheckbox disabled="false"											
+															style="margin-left: 25px;">
+									</h:selectBooleanCheckbox>		
+									<h:outputLabel value="Transporte Local(Taxi)" styleClass="ui-label-text"
+											style="margin-left: 10px;margin-right: 22px;" />
+											
+									<h:selectBooleanCheckbox disabled="false"											
+															style="margin-left: 25px;">
+									</h:selectBooleanCheckbox>		
+									<h:outputLabel value="Tours" styleClass="ui-label-text"
+											style="margin-left: 10px;margin-right: 22px;" />
+									
+					    						    	
+					    		</p:panelGrid>
+						
+									
+							</p:panel>
+							
+							<p:panelGrid 	columns="4"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
+												
+								<h:outputLabel value="Precio Minimo:" styleClass="ui-label-text" />
+								
+								<p:inputText   	id="txtPrecioMinimo" 		    		               
+		    					    			style="font-size: 10px; text-transform: uppercase;
+		    					    			width:120px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>	
+								
+								
+								<h:outputLabel value="Precio Maximo:" styleClass="ui-label-text" />
+								
+								<p:inputText   id="txtPrecioMaximo" 		    		               
+		    					    	style="font-size: 10px; text-transform: uppercase;
+		    					    	width:120px;" size="25" required="true"
+							 	 		requiredMessage="Ingrese Descripción de Orden">
+									<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>			
+												
+							</p:panelGrid>					
+							
+							<p:panelGrid 	columns="3"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
+												
+								<h:outputLabel value="Responsable:" styleClass="ui-label-text" />
+								
+								<p:inputText   	id="txtResponsable" 		    		               
+		    					    			style="font-size: 10px; text-transform: uppercase;
+		    					    			width:200px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>	
+								
+								<p:commandButton title="btnBuscar" 
+												value="Buscar" 
+												icon="ui-icon-search"  
+												process="@this,rbcotizacion" 													 
+												update=":frmRegistroOrdenes:tvRegistroOrdenes"
+												global="false">
+							</p:commandButton>				
+												
+							</p:panelGrid>
+							
+							<p:panelGrid 	columns="2"
+												columnClasses="alignRight,alignLeft,alignLeft"
+												styleClass="ui-border-panel">
+												
+							</p:panelGrid>					
+								<h:column>					
+								<h:outputLabel value="Observaciones:" styleClass="ui-label-text" />
+								</h:column>
+								<h:column>	
+								<p:inputText   	id="txtobservaciones" 		    		               
+		    					    			style="font-size: 10px; text-transform: uppercase;
+		    					    			width:600px;" size="25" required="true">
+									<p:ajax  global="false" update="@this"  event="blur" />
+								</p:inputText>				
+								</h:column>	
+						</p:panel>
 					
 					
 					</h:form>
